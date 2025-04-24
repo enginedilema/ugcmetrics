@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SocialProfile;
 use App\Http\Requests\StoreSocialProfileRequest;
 use App\Http\Requests\UpdateSocialProfileRequest;
+use App\Models\Platform;
 
 class SocialProfileController extends Controller
 {
@@ -37,7 +38,10 @@ class SocialProfileController extends Controller
      */
     public function show(SocialProfile $socialProfile)
     {
-        //
+        //Si el perfil social es de tipo Instagram, redirigir a la vista de Instagram
+        if($socialProfile->platform == Platform::where('name','Instagram')->first()){
+            return view('instagram.show',compact('socialProfile'));
+        }
     }
 
     /**

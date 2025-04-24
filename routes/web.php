@@ -5,8 +5,9 @@ use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\InstragramController;
 use App\Http\Controllers\InstagramGetInstagramData;
+use App\Http\Controllers\InstagramMetricsController;
+use App\Http\Controllers\SocialProfileController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,7 +24,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/password', Password::class)->name('settings.password');
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
 });
-Route::get('instagram',[InstragramController::class,'index'])->name('instagram.index');
+Route::get('instagram',[InstagramMetricsController::class,'index'])->name('instagram.index');
 Route::get('influencer',[InfluencerController::class,'index'])->name('influencer.index');
+Route::get('socialprofile/{socialProfile}',[SocialProfileController::class,'show'])->name('socialprofile.show');
 Route::get('instagramGetInstagramData',InstagramGetInstagramData::class)->name('instagram.getInstagramData');
 require __DIR__.'/auth.php';

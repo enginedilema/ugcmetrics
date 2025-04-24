@@ -13,7 +13,6 @@ class PlatformSeeder extends Seeder
      */
     public function run(): void
     {
-
         Platform::create(['name' => 'Instagram', 'description' => 'Instagram is a photo and video sharing social networking service owned by Facebook, Inc.']);
         Platform::create(['name' => 'TikTok', 'description' => 'TikTok is a social media platform for creating, sharing and discovering short music videos.']);
         Platform::create(['name' => 'YouTube', 'description' => 'YouTube is a video sharing platform where users can watch, like, share, comment, and upload their own videos']);
