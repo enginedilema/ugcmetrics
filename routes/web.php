@@ -9,9 +9,11 @@ use App\Http\Controllers\InstagramGetInstagramData;
 use App\Http\Controllers\InstagramMetricsController;
 use App\Http\Controllers\SocialProfileController;
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
 })->name('home');
+*/
+Route::get('/', [InfluencerController::class,'index'])->name('home');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
