@@ -19,9 +19,16 @@
                     class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
             </div>
             <div
-                class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
-                <x-placeholder-pattern
-                    class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
+                class="flex items-center justify-center aspect-video rounded-xl border border-purple-300 bg-white shadow-lg dark:bg-neutral-900 dark:border-neutral-700 hover:shadow-xl transition-shadow duration-300">
+                <div class="text-center space-y-2">
+                    <p class="text-base font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wide">
+                        {{__('Create Influencer')}}
+                    </p>
+                    <flux:button variant="primary" href="{{ route('influencer.create') }}">
+                        {{ __('Create') }}
+                    </flux:button>
+                    <div class="h-1 w-10 mx-auto bg-purple-300 rounded-full"></div>
+                </div>
             </div>
         </div>
         <div

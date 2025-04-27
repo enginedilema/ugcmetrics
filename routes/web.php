@@ -28,6 +28,8 @@ Route::middleware(['auth'])->group(function () {
 });
 Route::get('instagram',[InstagramMetricsController::class,'index'])->name('instagram.index');
 Route::get('influencer',[InfluencerController::class,'index'])->name('influencer.index');
+Route::get('influencer/create',[InfluencerController::class,'create'])->name('influencer.create');
+Route::post('influencer',[InfluencerController::class,'store'])->name('influencer.store');
 Route::get('socialprofile/{socialProfile}',[SocialProfileController::class,'show'])->name('socialprofile.show');
 Route::get('instagramGetInstagramData',InstagramGetInstagramData::class)->name('instagram.getInstagramData');
 require __DIR__.'/auth.php';

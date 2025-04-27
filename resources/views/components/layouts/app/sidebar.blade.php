@@ -14,8 +14,8 @@
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Platform')" class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-                    <flux:navbar.item icon="home" :href="route('influencer.index')" :current="request()->routeIs('influencer.index')" wire:navigate>{{ __('Influencer') }}</flux:navbar.item>
-                    <flux:navbar.item icon="home" :href="route('instagram.index')" :current="request()->routeIs('instagram.index')" wire:navigate>{{ __('Instagram') }}</flux:navbar.item>
+                    <flux:navbar.item icon="sparkles" :href="route('influencer.index')" :current="request()->routeIs('influencer.index')" wire:navigate>{{ __('Influencer') }}</flux:navbar.item>
+                    <flux:navbar.item icon="sparkles" :href="route('instagram.index')" :current="request()->routeIs('instagram.index')" wire:navigate>{{ __('Instagram') }}</flux:navbar.item>
                 </flux:navlist.group>
                 
             </flux:navlist>
