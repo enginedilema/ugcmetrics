@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('social_profile_id')->constrained()->onDelete('cascade');
             $table->date('date');
+            $table->string('biography')->nullable();
+            $table->string('category_name')->nullable();
+
             
             $table->integer('followers')->nullable();
             $table->float('growth_rate')->nullable(); // en %

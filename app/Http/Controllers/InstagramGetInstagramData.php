@@ -17,11 +17,9 @@ class InstagramGetInstagramData extends Controller
     public function __invoke(Request $request)
     {
         $forupdateInstagramAcount = SocialProfile::where('platform_id', Platform::where('name', 'Instagram')->first()->id)
-            ->orderBy('last_updated', 'desc')
-            ->where('username', 'ironpanda_fitness')
+            ->orderBy('last_updated', 'asc')
+        //    ->where('username', 'ironpanda_fitness')
             ->first();
-
-        $forupdateInstagramAcount->last_updated = now();
         //$forupdateInstagramAcount->save();
         $url = 'https://i.instagram.com/api/v1/users/web_profile_info/?username=' . $forupdateInstagramAcount->username;
 
@@ -50,6 +48,9 @@ class InstagramGetInstagramData extends Controller
         curl_close($ch);
         // Decodificar la respuesta JSON
         $response = json_decode($response);
+        if(!isset($response->status) || $response->status != 'ok') {
+            return response()->json(['error' => 'Error en la respuesta de Instagram: ' . $response->message], 500);
+        }
         //Actualizar SocialProfile del Instagram
         $forupdateInstagramAcount->followers_count = $response->data->user->edge_followed_by->count;
         $forupdateInstagramAcount->last_updated = now();
@@ -66,7 +67,7 @@ class InstagramGetInstagramData extends Controller
         }
         $instagramReport->save();
         $postsNumber = $response->data->user->edge_owner_to_timeline_media->count;
-        //return $response->data->user->edge_owner_to_timeline_media->edges[0]->node;
+           // return $response;
         foreach ($response->data->user->edge_owner_to_timeline_media->edges as $data) {
             $publishedAt = Carbon::createFromTimestamp($data->node->taken_at_timestamp, 'UTC')
                 ->setTimezone('Europe/Madrid');

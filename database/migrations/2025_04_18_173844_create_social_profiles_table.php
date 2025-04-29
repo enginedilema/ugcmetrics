@@ -16,7 +16,8 @@ return new class extends Migration
             $table->foreignId('influencer_id')->constrained()->onDelete('cascade');
             $table->foreignId('platform_id')->constrained()->onDelete('cascade');
             $table->string('username');
-            $table->string('profile_url')->nullable();
+            $table->string('profile_url')->default('')->nullable();
+            $table->string('profile_picture')->default('')->nullable();
             $table->integer('followers_count')->default(0);
             $table->float('engagement_rate')->nullable();
             $table->json('extra_data')->nullable(); // datos variables

@@ -59,12 +59,14 @@
                                     {{ $influencer->name }}
                                 </td>
                                 <td class="py-2 px-4 space-x-1">
+                                    <flux:avatar.group class="**:ring-zinc-100 dark:**:ring-zinc-800">
                                     @foreach ($influencer->socialProfiles as $profile)
                                         <a href="{{ $profile->profile_url ?? '#' }}" target="_blank"
                                             class="text-indigo-600 hover:underline">
-                                            {{ $profile->platform->name }}
-                                        </a>{{ !$loop->last ? ',' : '' }}
+                                            <flux:avatar circle src="{{asset('storage/img/platform/'. Str::lower($profile->platform->name).'.png')}}" />
+                                        </a>
                                     @endforeach
+                                </flux:avatar.group>
                                 </td>
                                 <td class="py-2 px-4 text-neutral-700 dark:text-neutral-300">
                                     {{ $influencer->socialProfiles->sum('followers_count') }}

@@ -16,9 +16,9 @@ UGC Metrics is a Laravel-based web application designed to help marketers, conte
 
 ## Requirements
 
-- PHP 8.1 or higher
+- PHP 8.2 or higher
 - Composer
-- MySQL 5.7+ or MariaDB 10.3+
+- SQLite, MySQL 5.7+ or MariaDB 10.3+
 - Node.js and NPM (for frontend assets)
 - Laravel requirements (BCMath, Ctype, JSON, Mbstring, OpenSSL, PDO, Tokenizer, XML)
 
@@ -104,3 +104,5 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - [Laravel](https://laravel.com/)
 - [Livewire](https://laravel-livewire.com/)
 - [Tailwind CSS](https://tailwindcss.com/)
+- [FluxUI](https://fluxui.dev/) - Tailwind based UI components library
+- [Heroicons](https://heroicons.com/) - Beautiful hand-crafted SVG icons
