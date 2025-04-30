@@ -115,6 +115,7 @@ class InstagramInfluencersSeeder extends Seeder
         curl_close($ch);
         // Decodificar la respuesta JSON
         $response = json_decode($response);
+        dd($response);
         return $response;
     }
 }

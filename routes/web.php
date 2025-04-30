@@ -27,6 +27,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
 });
 Route::get('instagram',[InstagramMetricsController::class,'index'])->name('instagram.index');
+Route::get('instagram/{id}',[InstagramMetricsController::class,'show'])->name('instagram.show');
 Route::get('influencer',[InfluencerController::class,'index'])->name('influencer.index');
 Route::get('influencer/create',[InfluencerController::class,'create'])->name('influencer.create');
 Route::post('influencer',[InfluencerController::class,'store'])->name('influencer.store');
