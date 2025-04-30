@@ -2,5 +2,3 @@
 !.gitignore
 !platform/
 !platform/**
-
-!platform/web/
