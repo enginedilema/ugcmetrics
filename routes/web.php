@@ -26,4 +26,10 @@ Route::middleware(['auth'])->group(function () {
 Route::get('instagram',[InstragramController::class,'index'])->name('instagram.index');
 Route::get('influencer',[InfluencerController::class,'index'])->name('influencer.index');
 Route::get('instagramGetInstagramData',InstagramGetInstagramData::class)->name('instagram.getInstagramData');
+
+// Rutas para Twitch
+Route::get('twitch', [App\Http\Controllers\TwitchController::class, 'index'])->name('twitch.index');
+Route::get('twitch/{username}', [App\Http\Controllers\TwitchController::class, 'show'])->name('twitch.show');
+Route::get('twitch/{username}/fetch', [App\Http\Controllers\TwitchController::class, 'fetchData'])->name('twitch.fetch');
+
 require __DIR__.'/auth.php';

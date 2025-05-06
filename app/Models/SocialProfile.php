@@ -57,6 +57,7 @@ class SocialProfile extends Model
     {
         return $this->hasMany(TiktokMetrics::class);
     }
+    
     /**
      * Get the Instagram posts associated with the social profile.
      * 
@@ -66,5 +67,15 @@ class SocialProfile extends Model
     {
         return $this->hasMany(InstagramPost::class)
                     ->whereHas('platform', fn ($q) => $q->where('name', 'Instagram'));
+    }
+
+    /**
+     * Get the Twitch streams associated with the social profile.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function twitchStreams(): HasMany
+    {
+        return $this->hasMany(TwitchStream::class);
     }
 }
