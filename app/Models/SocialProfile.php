@@ -16,6 +16,7 @@ class SocialProfile extends Model
         'platform_id',
         'username',
         'profile_url',
+        'profile_picture',
         'followers_count',
         'engagement_rate',
         'extra_data',

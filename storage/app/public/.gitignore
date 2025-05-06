@@ -1,2 +1,7 @@
 *
 !.gitignore
+!img/
+!img/platform/
+!img/platform/**
+!img/influencer/
+!img/influencer/placeholder-profile.png
