@@ -71,6 +71,16 @@ class SocialProfile extends Model
     }
 
     /**
+     * Get the Twitch metrics associated with the social profile.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function twitchMetrics(): HasMany
+    {
+        return $this->hasMany(TwitchMetrics::class);
+    }
+
+    /**
      * Get the Twitch streams associated with the social profile.
      * 
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
