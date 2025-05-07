@@ -13,7 +13,7 @@ use App\Http\Controllers\SocialProfileController;
     return view('welcome');
 })->name('home');
 */
-Route::get('/', [InfluencerController::class,'index'])->name('home');
+Route::get('/', [InfluencerController::class, 'index'])->name('home');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -26,11 +26,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/password', Password::class)->name('settings.password');
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
 });
-Route::get('instagram',[InstagramMetricsController::class,'index'])->name('instagram.index');
-Route::get('instagram/{id}',[InstagramMetricsController::class,'show'])->name('instagram.show');
-Route::get('influencer',[InfluencerController::class,'index'])->name('influencer.index');
-Route::get('influencer/create',[InfluencerController::class,'create'])->name('influencer.create');
-Route::post('influencer',[InfluencerController::class,'store'])->name('influencer.store');
-Route::get('socialprofile/{socialProfile}',[SocialProfileController::class,'show'])->name('socialprofile.show');
-Route::get('instagramGetInstagramData',InstagramGetInstagramData::class)->name('instagram.getInstagramData');
-require __DIR__.'/auth.php';
+
+Route::get('instagram', [InstagramMetricsController::class, 'index'])->name('instagram.index');
+Route::get('instagram/{id}', [InstagramMetricsController::class, 'show'])->name('instagram.show');
+Route::get('influencer', [InfluencerController::class, 'index'])->name('influencer.index');
+Route::get('influencer/create', [InfluencerController::class, 'create'])->name('influencer.create');
+Route::post('influencer', [InfluencerController::class, 'store'])->name('influencer.store');
+Route::get('socialprofile/{socialProfile}', [SocialProfileController::class, 'show'])->name('socialprofile.show');
+Route::get('instagramGetInstagramData', InstagramGetInstagramData::class)->name('instagram.getInstagramData');
+
+// Rutas para Twitch
+Route::get('twitch', [App\Http\Controllers\TwitchController::class, 'index'])->name('twitch.index');
+Route::get('twitch/{username}', [App\Http\Controllers\TwitchController::class, 'show'])->name('twitch.show');
+Route::get('twitch/{username}/fetch', [App\Http\Controllers\TwitchController::class, 'fetchData'])->name('twitch.fetch');
+
+require __DIR__ . '/auth.php';

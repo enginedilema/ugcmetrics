@@ -39,9 +39,15 @@ class InstagramInfluencersSeeder extends Seeder
             $influencer = Influencer::create([
                 'name' => $username,
                 'bio' => '',
+                'username' => $username, // Añadir el campo username que ahora es obligatorio
                 'profile_picture_url' => "" // Placeholder URL
             ]);
+<<<<<<< HEAD
             $imgURL = $data->data->user->profile_pic_url;
+=======
+            
+            /*$imgURL = $data->data->user->profile_pic_url;
+>>>>>>> 77fb71437e1ba76b280f8b89956687bfca89b01d
             $imgPath = 'img/influencer/' . $username . '.jpg';
             Storage::disk('public')->put($imgPath, file_get_contents($imgURL));
             $influencer->profile_picture_url = $imgPath;
