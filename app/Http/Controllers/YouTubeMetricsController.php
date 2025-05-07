@@ -6,6 +6,10 @@ use App\Models\YouTubeMetrics;
 use App\Http\Requests\StoreYouTubeMetricsRequest;
 use App\Http\Requests\UpdateYouTubeMetricsRequest;
 use Illuminate\Http\Request;
+use App\Http\Controllers\InfluencerController;
+use App\Models\Influencer;
+
+
 
 class YouTubeMetricsController extends Controller
 {
@@ -14,9 +18,10 @@ class YouTubeMetricsController extends Controller
      */
     public function index()
     {
-        $metrics = YouTubeMetrics::all();
-        return response()->json($metrics);
+        $influencers = Influencer::with('socialProfiles.platform')->get();
+        return view('youtube.index', compact('influencers'));
     }
+    
 
     /**
      * Show the form for creating a new resource.

@@ -10,6 +10,7 @@ use App\Http\Controllers\InstagramMetricsController;
 use App\Http\Controllers\SocialProfileController;
 use App\Models\YouTubeMetric;
 use App\Models\YouTubeMetrics;
+use App\Http\Controllers\YouTubeMetricsController;
 
 /*Route::get('/', function () {
     return view('welcome');
@@ -37,6 +38,8 @@ Route::post('influencer', [InfluencerController::class, 'store'])->name('influen
 Route::get('socialprofile/{socialProfile}', [SocialProfileController::class, 'show'])->name('socialprofile.show');
 Route::get('instagramGetInstagramData', InstagramGetInstagramData::class)->name('instagram.getInstagramData');
 
+Route::get('/youtube', [YouTubeMetricsController::class, 'index'])->name('youtube.index');
+Route::get('/youtube/{id}', [YouTubeMetricsController::class, 'show'])->name('youtube.show');
 Route::get('/youtube-metrics', function () {
     $metrics = YouTubeMetrics::with('socialProfile.influencer')->get();
     return view('youtube-metrics', compact('metrics'));

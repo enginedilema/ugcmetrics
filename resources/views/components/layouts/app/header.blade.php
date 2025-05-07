@@ -21,6 +21,9 @@
                 <flux:navbar.item icon="layout-grid" :href="route('instagram.index')" :current="request()->routeIs('instagram')" wire:navigate>
                     {{ __('Instagram') }}
                 </flux:navbar.item>
+                <flux:navbar.item icon="layout-grid" :href="route('youtube.index')" :current="request()->routeIs('youtube')" wire:navigate>
+                    {{ __('Youtube') }}
+                </flux:navbar.item>
             </flux:navbar>
 
             <flux:spacer />
