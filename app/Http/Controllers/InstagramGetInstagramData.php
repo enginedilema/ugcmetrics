@@ -49,6 +49,7 @@ class InstagramGetInstagramData extends Controller
         // Decodificar la respuesta JSON
         $response = json_decode($response);
         if(!isset($response->status) || $response->status != 'ok') {
+            var_dump($response);
             return response()->json(['error' => 'Error en la respuesta de Instagram: ' . $response->message], 500);
         }
         //Actualizar SocialProfile del Instagram

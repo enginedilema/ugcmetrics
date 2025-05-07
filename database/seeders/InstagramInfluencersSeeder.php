@@ -29,6 +29,7 @@ class InstagramInfluencersSeeder extends Seeder
             ]
         );
 
+        
         $arrayInstagramInfluencers = ['auronplay','mirpratur', 'ironpanda_fitness', 'ironpanda._', 'livetgn', 'adriamarcor', 'nil.sanchhez', 'hogardiez', 'ruaaniii', 'losmaui', 'feriadebebes', 'tuviiajeredondo', 'ilovemipisito', 'daily_4_cycling', 'nuriamgallardo2', 'marinacomes','iamoriolmiro','mouredev'];
 
         foreach ($arrayInstagramInfluencers as $username) {
@@ -40,21 +41,21 @@ class InstagramInfluencersSeeder extends Seeder
                 'bio' => '',
                 'profile_picture_url' => "" // Placeholder URL
             ]);
-            /*$imgURL = $data->data->user->profile_pic_url;
+            $imgURL = $data->data->user->profile_pic_url;
             $imgPath = 'img/influencer/' . $username . '.jpg';
             Storage::disk('public')->put($imgPath, file_get_contents($imgURL));
             $influencer->profile_picture_url = $imgPath;
             $influencer->save();
             $imgPath = 'img/socialprofile/' . $username . '.jpg';
             Storage::disk('public')->put($imgPath, file_get_contents($imgURL));
-*/
+
             // Create the social profile for Instagram
             SocialProfile::create([
                 'influencer_id' => $influencer->id,
                 'platform_id' => $platform->id,
                 'username' => $username,
                 'profile_url' => "https://www.instagram.com/{$username}/",
-                //'profile_picture' => $imgPath,
+                'profile_picture' => $imgPath,
             ]);
 
             $this->command->info("Created influencer: {$username} with Instagram username: {$username}");
