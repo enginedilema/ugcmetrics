@@ -1,4 +1,4 @@
-<!-- <?php
+<?php
 
 namespace Database\Seeders;
 
@@ -62,7 +62,7 @@ class InstagramInfluencersSeeder extends Seeder
                 'profile_picture' => $imgPath,
             ]);
 
-            $this->command->info("Created influencer: {$username} with Instagram username: {$username}");
+            $this->command->info("Created influencer: {$username} with Instagram username: {$username}");*/
         }
 
 
@@ -122,4 +122,4 @@ class InstagramInfluencersSeeder extends Seeder
         $response = json_decode($response);
         return $response;
     }
-} -->
+} 
