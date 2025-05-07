@@ -6,6 +6,18 @@
         </div>
     @endif
     
+    @if(session('success'))
+        <div class="bg-green-100 dark:bg-green-900 border border-green-400 dark:border-green-700 text-green-700 dark:text-green-300 px-4 py-3 rounded relative mb-6" role="alert">
+            <span class="block sm:inline">{{ session('success') }}</span>
+        </div>
+    @endif
+    
+    @if(session('error'))
+        <div class="bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded relative mb-6" role="alert">
+            <span class="block sm:inline">{{ session('error') }}</span>
+        </div>
+    @endif
+    
     <div class="flex justify-between items-center mb-8">
         <div class="flex items-center">
             <a href="{{ route('twitch.index') }}" class="mr-4 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-bold py-2 px-4 rounded inline-flex items-center">
@@ -25,18 +37,19 @@
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-8">
-        <!-- Tarjeta de perfil -->
         <div class="lg:col-span-1">
             <div class="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
                 <div class="flex flex-col items-center text-center mb-4">
-                    @if($profile->influencer->profile_picture_url)
+                    @if($profile->profile_picture)
+                        <img src="{{ $profile->profile_picture }}" class="w-32 h-32 rounded-full object-cover border-4 border-purple-500 mb-4" alt="{{ $profile->username }}">
+                    @elseif($profile->influencer && $profile->influencer->profile_picture_url)
                         <img src="{{ asset('storage/' . $profile->influencer->profile_picture_url) }}" class="w-32 h-32 rounded-full object-cover border-4 border-purple-500 mb-4" alt="{{ $profile->username }}">
                     @else
                         <div class="w-32 h-32 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center border-4 border-purple-500 mb-4">
                             <span class="text-4xl text-purple-600 dark:text-purple-400">{{ substr($profile->username, 0, 1) }}</span>
                         </div>
                     @endif
-                    <h2 class="text-2xl font-semibold dark:text-white">{{ $profile->influencer->name }}</h2>
+                    <h2 class="text-2xl font-semibold dark:text-white">{{ $profile->influencer->name ?? ($profile->extra_data['display_name'] ?? $profile->username) }}</h2>
                     <p class="text-purple-600 dark:text-purple-400">@{{ $profile->username }}</p>
                     
                     <div class="mt-2">
@@ -50,7 +63,11 @@
                 </div>
                 
                 <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
-                    <p class="text-gray-700 dark:text-gray-300 mb-4">{{ $profile->influencer->bio }}</p>
+                    @if(isset($profile->extra_data['description']))
+                        <p class="text-gray-700 dark:text-gray-300 mb-4">{{ $profile->extra_data['description'] }}</p>
+                    @elseif($profile->influencer && $profile->influencer->bio)
+                        <p class="text-gray-700 dark:text-gray-300 mb-4">{{ $profile->influencer->bio }}</p>
+                    @endif
                     
                     <div class="grid grid-cols-2 gap-4 mb-4">
                         <div class="bg-gray-50 dark:bg-zinc-700 p-3 rounded text-center">
@@ -58,28 +75,36 @@
                             <p class="text-xl font-bold dark:text-white">{{ number_format($profile->followers_count) }}</p>
                         </div>
                         <div class="bg-gray-50 dark:bg-zinc-700 p-3 rounded text-center">
-                            <span class="block text-sm text-gray-500 dark:text-gray-400">Engagement</span>
-                            <p class="text-xl font-bold dark:text-white">{{ number_format($profile->engagement_rate, 1) }}%</p>
+                            <span class="block text-sm text-gray-500 dark:text-gray-400">Vistas</span>
+                            <p class="text-xl font-bold dark:text-white">{{ number_format($profile->extra_data['view_count'] ?? 0) }}</p>
                         </div>
                     </div>
                     
-                    <div class="mb-4">
-                        <p class="flex items-center text-gray-700 dark:text-gray-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                            {{ $profile->influencer->location }}
-                        </p>
-                    </div>
+                    @if($profile->influencer && $profile->influencer->location)
+                        <div class="mb-4">
+                            <p class="flex items-center text-gray-700 dark:text-gray-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                {{ $profile->influencer->location }}
+                            </p>
+                        </div>
+                    @endif
                     
                     @if(!empty($profile->extra_data) && is_array($profile->extra_data))
                         <div class="flex flex-wrap gap-2">
                             @if(isset($profile->extra_data['verified']) && $profile->extra_data['verified'])
                                 <span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300 text-xs px-2 py-1 rounded-full">Verificado</span>
                             @endif
-                            @if(isset($profile->extra_data['partner']) && $profile->extra_data['partner'])
+                            @if(isset($profile->extra_data['is_partner']) && $profile->extra_data['is_partner'])
                                 <span class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-300 text-xs px-2 py-1 rounded-full">Partner</span>
+                            @endif
+                            @if(isset($profile->extra_data['is_affiliate']) && $profile->extra_data['is_affiliate'])
+                                <span class="bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-300 text-xs px-2 py-1 rounded-full">Affiliate</span>
+                            @endif
+                            @if(isset($profile->extra_data['language']))
+                                <span class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-300 text-xs px-2 py-1 rounded-full">{{ strtoupper($profile->extra_data['language']) }}</span>
                             @endif
                         </div>
                     @endif
@@ -87,7 +112,6 @@
             </div>
         </div>
         
-        <!-- Estadísticas clave -->
         <div class="lg:col-span-3">
             <div class="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
                 <h3 class="text-xl font-semibold mb-4 dark:text-white">Estadísticas clave de los últimos 30 días</h3>
@@ -98,30 +122,17 @@
                             $lastMetric = $metrics->first();
                             $firstMetric = $metrics->last();
                             
-                            // Calcular promedios
-                            $avgViewers = $metrics->avg('average_viewers');
-                            $totalHoursStreamed = $metrics->sum('hours_streamed');
-                            $totalStreamCount = $metrics->sum('stream_count');
-                            $peakViewers = $metrics->max('peak_viewers');
+                            $avgViewers = $metrics->avg('average_viewers') ?: 0;
+                            $totalHoursStreamed = $metrics->sum('hours_streamed') ?: 0;
+                            $totalStreamCount = $metrics->sum('stream_count') ?: 0;
+                            $peakViewers = $metrics->max('peak_viewers') ?: 0;
+                            
+                            $followers = isset($lastMetric->followers) ? $lastMetric->followers : $profile->followers_count;
                         @endphp
                         
                         <div class="text-center">
-                            <span class="text-gray-500 dark:text-gray-400 text-sm">Crecimiento de seguidores</span>
-                            @if($firstMetric && $lastMetric)
-                                @php
-                                    $growth = $lastMetric->followers - $firstMetric->followers;
-                                    $growthPercent = $firstMetric->followers > 0 ? 
-                                        ($growth / $firstMetric->followers) * 100 : 0;
-                                @endphp
-                                <p class="text-2xl font-bold {{ $growth >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">
-                                    {{ $growth >= 0 ? '+' : '' }}{{ number_format($growth) }}
-                                </p>
-                                <p class="text-sm {{ $growth >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">
-                                    {{ $growth >= 0 ? '+' : '' }}{{ number_format($growthPercent, 2) }}%
-                                </p>
-                            @else
-                                <p class="text-2xl font-bold dark:text-white">N/A</p>
-                            @endif
+                            <span class="text-gray-500 dark:text-gray-400 text-sm">Seguidores</span>
+                            <p class="text-2xl font-bold dark:text-white">{{ number_format($followers) }}</p>
                         </div>
                         
                         <div class="text-center">
@@ -140,10 +151,38 @@
                         </div>
                     </div>
                     
+                    @if($lastMetric && $firstMetric && $lastMetric->followers != $firstMetric->followers)
+                    <div class="mt-6">
+                        <h4 class="text-lg font-medium mb-3 dark:text-white">Crecimiento de seguidores</h4>
+                        <div class="bg-gray-50 dark:bg-zinc-700 p-4 rounded-lg">
+                            @php
+                                $growth = $lastMetric->followers - $firstMetric->followers;
+                                $growthPercent = $firstMetric->followers > 0 ? 
+                                    ($growth / $firstMetric->followers) * 100 : 0;
+                            @endphp
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">Inicial</p>
+                                    <p class="text-xl font-bold dark:text-white">{{ number_format($firstMetric->followers) }}</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">Cambio</p>
+                                    <p class="text-xl font-bold {{ $growth >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">
+                                        {{ $growth >= 0 ? '+' : '' }}{{ number_format($growth) }} ({{ number_format($growthPercent, 2) }}%)
+                                    </p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">Actual</p>
+                                    <p class="text-xl font-bold dark:text-white">{{ number_format($lastMetric->followers) }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+                    
                     <div class="mt-6">
                         <h4 class="text-lg font-medium mb-3 dark:text-white">Últimos 30 días de actividad</h4>
                         <div class="aspect-w-16 aspect-h-6 bg-gray-50 dark:bg-zinc-700 p-4 rounded-lg">
-                            <!-- Aquí iría un gráfico de métricas diarias -->
                             <div class="flex items-center justify-center h-full">
                                 <p class="text-gray-500 dark:text-gray-400 text-center">
                                     [Gráfico con datos diarios de espectadores y seguidores]
@@ -160,7 +199,6 @@
         </div>
     </div>
     
-    <!-- Streams recientes -->
     <div class="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700 mb-8">
         <h3 class="text-xl font-semibold mb-4 dark:text-white">Streams recientes</h3>
         
@@ -182,10 +220,14 @@
                         @foreach($streams as $stream)
                             <tr class="hover:bg-gray-50 dark:hover:bg-zinc-700">
                                 <td class="py-3 px-4 dark:text-gray-300">
-                                    {{ $stream->started_at->format('d/m/Y H:i') }}
+                                    @if(is_string($stream->started_at))
+                                        {{ date('d/m/Y H:i', strtotime($stream->started_at)) }}
+                                    @else
+                                        {{ $stream->started_at->format('d/m/Y H:i') }}
+                                    @endif
                                 </td>
                                 <td class="py-3 px-4 max-w-xs truncate dark:text-gray-300">
-                                    <a href="{{ $stream->stream_url }}" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">
+                                    <a href="{{ $stream->stream_url ?? '#' }}" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">
                                         {{ $stream->title }}
                                     </a>
                                 </td>
@@ -214,7 +256,6 @@
         @endif
     </div>
     
-    <!-- Reportes mensuales -->
     <div class="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700 mb-8">
         <h3 class="text-xl font-semibold mb-4 dark:text-white">Reportes mensuales</h3>
         
@@ -258,7 +299,6 @@
                 </table>
             </div>
             
-            <!-- Categorías más usadas -->
             @if($reports->count() > 0 && $reports->first()->top_categories)
                 <div class="mt-6">
                     <h4 class="text-lg font-medium mb-3 dark:text-white">Categorías más usadas (último reporte)</h4>
@@ -278,7 +318,6 @@
         @endif
     </div>
     
-    <!-- Valoración financiera -->
     <div class="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
         <h3 class="text-xl font-semibold mb-4 dark:text-white">Valoración financiera estimada</h3>
         

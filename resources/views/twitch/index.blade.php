@@ -1,6 +1,5 @@
 <x-layouts.app :title="__('Perfiles de Twitch')">
 <div class="container mx-auto px-4 py-8">
-    <!-- Añadimos una barra de navegación para las diferentes plataformas -->
     <div class="mb-6 border-b border-gray-200 dark:border-gray-700 pb-4">
         <nav class="flex space-x-6">
             <a href="{{ url('/dashboard') }}" class="text-gray-600 dark:text-gray-300 hover:text-purple-700 dark:hover:text-purple-400 {{ request()->is('dashboard') ? 'text-purple-700 dark:text-purple-400 font-semibold' : '' }}">
@@ -34,9 +33,22 @@
         </div>
     @endif
 
+    @if(session('error'))
+        <div class="bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded relative mb-4" role="alert">
+            <strong class="font-bold">Error:</strong>
+            <span class="block sm:inline">{{ session('error') }}</span>
+        </div>
+    @endif
+
     @if(session('info'))
         <div class="bg-blue-100 dark:bg-blue-900 border border-blue-400 dark:border-blue-700 text-blue-700 dark:text-blue-300 px-4 py-3 rounded relative mb-4" role="alert">
             <span class="block sm:inline">{{ session('info') }}</span>
+        </div>
+    @endif
+
+    @if(session('success'))
+        <div class="bg-green-100 dark:bg-green-900 border border-green-400 dark:border-green-700 text-green-700 dark:text-green-300 px-4 py-3 rounded relative mb-4" role="alert">
+            <span class="block sm:inline">{{ session('success') }}</span>
         </div>
     @endif
 
