@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InstagramGetInstagramData;
 use App\Http\Controllers\InstagramMetricsController;
 use App\Http\Controllers\SocialProfileController;
+use App\Models\YouTubeMetric;
+use App\Models\YouTubeMetrics;
 
 /*Route::get('/', function () {
     return view('welcome');
@@ -34,6 +36,11 @@ Route::get('influencer/create', [InfluencerController::class, 'create'])->name('
 Route::post('influencer', [InfluencerController::class, 'store'])->name('influencer.store');
 Route::get('socialprofile/{socialProfile}', [SocialProfileController::class, 'show'])->name('socialprofile.show');
 Route::get('instagramGetInstagramData', InstagramGetInstagramData::class)->name('instagram.getInstagramData');
+
+Route::get('/youtube-metrics', function () {
+    $metrics = YouTubeMetrics::with('socialProfile.influencer')->get();
+    return view('youtube-metrics', compact('metrics'));
+});
 
 // Rutas para Twitch
 Route::get('twitch', [App\Http\Controllers\TwitchController::class, 'index'])->name('twitch.index');

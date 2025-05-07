@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\YouTubeMetrics;
 use App\Http\Requests\StoreYouTubeMetricsRequest;
 use App\Http\Requests\UpdateYouTubeMetricsRequest;
+use Illuminate\Http\Request;
 
 class YouTubeMetricsController extends Controller
 {
@@ -13,7 +14,8 @@ class YouTubeMetricsController extends Controller
      */
     public function index()
     {
-        //
+        $metrics = YouTubeMetrics::all();
+        return response()->json($metrics);
     }
 
     /**
@@ -21,7 +23,8 @@ class YouTubeMetricsController extends Controller
      */
     public function create()
     {
-        //
+        // Normalmente usado para mostrar un formulario en apps web.
+        return response()->json(['message' => 'Mostrar formulario de creación.']);
     }
 
     /**
@@ -29,7 +32,8 @@ class YouTubeMetricsController extends Controller
      */
     public function store(StoreYouTubeMetricsRequest $request)
     {
-        //
+        $metric = YouTubeMetrics::create($request->validated());
+        return response()->json($metric, 201);
     }
 
     /**
@@ -37,7 +41,7 @@ class YouTubeMetricsController extends Controller
      */
     public function show(YouTubeMetrics $youTubeMetrics)
     {
-        //
+        return response()->json($youTubeMetrics);
     }
 
     /**
@@ -45,7 +49,8 @@ class YouTubeMetricsController extends Controller
      */
     public function edit(YouTubeMetrics $youTubeMetrics)
     {
-        //
+        // Normalmente usado para mostrar un formulario en apps web.
+        return response()->json(['message' => 'Mostrar formulario de edición.', 'data' => $youTubeMetrics]);
     }
 
     /**
@@ -53,7 +58,8 @@ class YouTubeMetricsController extends Controller
      */
     public function update(UpdateYouTubeMetricsRequest $request, YouTubeMetrics $youTubeMetrics)
     {
-        //
+        $youTubeMetrics->update($request->validated());
+        return response()->json($youTubeMetrics);
     }
 
     /**
@@ -61,6 +67,7 @@ class YouTubeMetricsController extends Controller
      */
     public function destroy(YouTubeMetrics $youTubeMetrics)
     {
-        //
+        $youTubeMetrics->delete();
+        return response()->json(['message' => 'Métrica eliminada con éxito.']);
     }
 }

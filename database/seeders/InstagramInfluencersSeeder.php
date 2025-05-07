@@ -42,7 +42,7 @@ class InstagramInfluencersSeeder extends Seeder
                 'username' => $username, // Añadir el campo username que ahora es obligatorio
                 'profile_picture_url' => "" // Placeholder URL
             ]);
-            $imgURL = $data->data->user->profile_pic_url;
+            // $imgURL = $data->data->user->profile_pic_url;
 
             
             /*$imgURL = $data->data->user->profile_pic_url;
