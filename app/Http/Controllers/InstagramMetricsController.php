@@ -43,10 +43,15 @@ class InstagramMetricsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(InstagramMetrics $instagramMetrics)
+    public function show(int $id)
     {
-        //
+        // Fetch the Instagram metrics for the specified influencer
+        $instagramMetrics = InstagramMetrics::where('social_profile_id', $id)->get();
+
+        // Return the view with the Instagram metrics data
+        return view('instagram_metrics.show', compact('instagramMetrics'));
     }
+
 
     /**
      * Show the form for editing the specified resource.

@@ -24,6 +24,7 @@ class InfluencerSeeder extends Seeder
                 'name' => $faker->name,
                 'bio' => $faker->sentence,
                 'location' => $faker->city,
+                'username' => $faker->userName, // Añadir el username
                 'profile_picture_url' => ''
             ]);
     

@@ -15,6 +15,8 @@
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
                     <flux:navlist.item icon="sparkles" :href="route('influencer.index')" :current="request()->routeIs('influencer.*')" >{{ __('Influencer') }}</flux:navlist.item>
                     <flux:navlist.item icon="sparkles" :href="route('instagram.index')" :current="request()->routeIs('instagram.index')">{{ __('Instagram') }}</flux:navlist.item>
+                    <flux:navlist.item icon="sparkles" :href="route('reddit.index')" :current="request()->routeIs('reddit.index')">{{ __('Reddit') }}</flux:navlist.item>
+                    <flux:navlist.item icon="play" :href="route('twitch.index')" :current="request()->routeIs('twitch.*')">{{ __('Twitch') }}</flux:navlist.item>
 
             </flux:navlist>
 

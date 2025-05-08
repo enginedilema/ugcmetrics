@@ -49,7 +49,7 @@
                             <tr class="bg-white dark:bg-neutral-800 shadow-sm rounded-md">
                                 <td class="py-2 px-4">
                                     <div class="w-[50px] h-[50px]">
-                                        <img src="{{ $influencer->profile_picture_url !== '' ? asset('storage/' . $influencer->profile_picture_url) : asset('storage/images/placeholder-profile.png') }}"
+                                        <img src="{{ $influencer->profile_picture_url !== '' ? asset('storage/' . $influencer->profile_picture_url) : asset('storage/img/influencer/placeholder-profile.png') }}"
                                             alt="Foto de {{ $influencer->name }}"
                                             class="w-full h-full rounded-full object-cover"
                                             style="width: 50px; height: 50px;">
