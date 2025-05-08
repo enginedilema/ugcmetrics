@@ -1,114 +1,85 @@
-<x-layouts.app :title="__('Perfiles de Twitch')">
-<div class="container mx-auto px-4 py-8">
-    <!-- Añadimos una barra de navegación para las diferentes plataformas -->
-    <div class="mb-6 border-b border-gray-200 dark:border-gray-700 pb-4">
-        <nav class="flex space-x-6">
-            <a href="{{ url('/dashboard') }}" class="text-gray-600 dark:text-gray-300 hover:text-purple-700 dark:hover:text-purple-400 {{ request()->is('dashboard') ? 'text-purple-700 dark:text-purple-400 font-semibold' : '' }}">
-                Dashboard
-            </a>
-            <a href="{{ route('influencer.index') }}" class="text-gray-600 dark:text-gray-300 hover:text-purple-700 dark:hover:text-purple-400 {{ request()->is('influencer*') ? 'text-purple-700 dark:text-purple-400 font-semibold' : '' }}">
-                Influencers
-            </a>
-            <a href="{{ route('instagram.index') }}" class="text-gray-600 dark:text-gray-300 hover:text-purple-700 dark:hover:text-purple-400 {{ request()->is('instagram*') ? 'text-purple-700 dark:text-purple-400 font-semibold' : '' }}">
-                Instagram
-            </a>
-            <a href="{{ route('twitch.index') }}" class="text-gray-600 dark:text-gray-300 hover:text-purple-700 dark:hover:text-purple-400 {{ request()->is('twitch*') ? 'text-purple-700 dark:text-purple-400 font-semibold' : '' }}">
-                Twitch
-            </a>
-        </nav>
-    </div>
-
-    <div class="flex items-center justify-between mb-8">
-        <h1 class="text-3xl font-bold text-purple-700 dark:text-purple-400">Perfiles de Twitch</h1>
-        <div class="text-gray-600 dark:text-gray-300">
-            <span class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-300 px-3 py-1 rounded-full text-sm font-medium">
-                {{ count($profiles) }} perfiles encontrados
-            </span>
-        </div>
-    </div>
-
-    @if(isset($error))
-        <div class="bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded relative mb-4" role="alert">
-            <strong class="font-bold">Error:</strong>
-            <span class="block sm:inline">{{ $error }}</span>
-        </div>
-    @endif
-
-    @if(session('info'))
-        <div class="bg-blue-100 dark:bg-blue-900 border border-blue-400 dark:border-blue-700 text-blue-700 dark:text-blue-300 px-4 py-3 rounded relative mb-4" role="alert">
-            <span class="block sm:inline">{{ session('info') }}</span>
-        </div>
-    @endif
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        @foreach($profiles as $profile)
-            <div class="bg-white dark:bg-zinc-800 rounded-lg shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow duration-300">
-                <div class="p-5">
-                    <div class="flex items-center">
-                        @if($profile->influencer->profile_picture_url)
-                            <img src="{{ asset('storage/' . $profile->influencer->profile_picture_url) }}" alt="{{ $profile->username }}" 
-                                class="w-16 h-16 rounded-full object-cover mr-4 border-2 border-purple-500">
-                        @else
-                            <div class="w-16 h-16 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mr-4 border-2 border-purple-500">
-                                <span class="text-2xl text-purple-600 dark:text-purple-400">{{ substr($profile->username, 0, 1) }}</span>
-                            </div>
-                        @endif
-                        <div>
-                            <h2 class="text-xl font-semibold dark:text-white">{{ $profile->influencer->name }}</h2>
-                            <a href="{{ route('twitch.show', $profile->username) }}" class="text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300">
-                                @{{ $profile->username }}
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="mt-4 grid grid-cols-2 gap-4">
-                        <div class="bg-gray-50 dark:bg-zinc-700 p-2 rounded">
-                            <span class="text-sm text-gray-500 dark:text-gray-400">Seguidores</span>
-                            <p class="text-lg font-semibold dark:text-white">{{ number_format($profile->followers_count) }}</p>
-                        </div>
-                        <div class="bg-gray-50 dark:bg-zinc-700 p-2 rounded">
-                            <span class="text-sm text-gray-500 dark:text-gray-400">Engagement</span>
-                            <p class="text-lg font-semibold dark:text-white">{{ number_format($profile->engagement_rate, 1) }}%</p>
-                        </div>
-                    </div>
-
-                    @if(isset($reports[$profile->id]) && count($reports[$profile->id]) > 0)
-                        @php
-                            $latestReport = $reports[$profile->id]->first();
-                        @endphp
-                        <div class="mt-4">
-                            <h3 class="text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">Último reporte ({{ $latestReport->month }}/{{ $latestReport->year }})</h3>
-                            <div class="grid grid-cols-2 gap-2 text-sm">
-                                <div>
-                                    <span class="text-gray-500 dark:text-gray-400">Avg. viewers</span>
-                                    <p class="font-medium dark:text-white">{{ number_format($latestReport->average_viewers) }}</p>
-                                </div>
-                                <div>
-                                    <span class="text-gray-500 dark:text-gray-400">Peak viewers</span>
-                                    <p class="font-medium dark:text-white">{{ number_format($latestReport->peak_viewers) }}</p>
-                                </div>
-                                <div>
-                                    <span class="text-gray-500 dark:text-gray-400">Streams/week</span>
-                                    <p class="font-medium dark:text-white">{{ number_format($latestReport->streams_per_week, 1) }}</p>
-                                </div>
-                                <div>
-                                    <span class="text-gray-500 dark:text-gray-400">Crecimiento</span>
-                                    <p class="font-medium {{ $latestReport->growth_rate >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">
-                                        {{ number_format($latestReport->growth_rate, 1) }}%
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-
-                    <div class="mt-4">
-                        <a href="{{ route('twitch.show', $profile->username) }}" class="inline-block bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded transition-colors duration-300">
-                            Ver análisis detallado
-                        </a>
-                    </div>
+<x-layouts.app :title="__('Twitch Influencers')">
+    <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
+        <div class="grid auto-rows-min gap-4 md:grid-cols-3">
+            <div
+                class="flex items-center justify-center aspect-video rounded-xl border border-purple-300 bg-white shadow-lg dark:bg-neutral-900 dark:border-neutral-700 hover:shadow-xl transition-shadow duration-300">
+                <div class="text-center space-y-2">
+                    <p class="text-base font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wide">
+                        Total Influencers
+                    </p>
+                    <p class="text-5xl font-extrabold text-purple-600 dark:text-purple-400">
+                        {{ $influencers->count() }}
+                    </p>
+                    <div class="h-1 w-10 mx-auto bg-purple-300 rounded-full"></div>
                 </div>
             </div>
-        @endforeach
+            <div
+                class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
+                <x-placeholder-pattern
+                    class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
+            </div>
+            <div
+                class="flex items-center justify-center aspect-video rounded-xl border border-purple-300 bg-white shadow-lg dark:bg-neutral-900 dark:border-neutral-700 hover:shadow-xl transition-shadow duration-300">
+                <div class="text-center space-y-2">
+                    <p class="text-base font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wide">
+                        {{__('Create Influencer')}}
+                    </p>
+                    <flux:button variant="primary" href="{{ route('influencer.create') }}">
+                        {{ __('Create') }}
+                    </flux:button>
+                    <div class="h-1 w-10 mx-auto bg-purple-300 rounded-full"></div>
+                </div>
+            </div>
+        </div>
+        <div
+            class="relative h-full flex-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
+            <h2 class="text-xl font-semibold text-neutral-800 dark:text-white mb-4">Listado de Influencers (Twitch)</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left border-separate border-spacing-y-2">
+                    <thead>
+                        <tr class="text-neutral-600 dark:text-neutral-300">
+                            <th class="py-3 px-4">Foto</th>
+                            <th class="py-3 px-4">Nombre</th>
+                            <th class="py-3 px-4">Plataformas</th>
+                            <th class="py-3 px-4">Seguidores Totales</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($influencers as $influencer)
+                            @if ($influencer->socialProfiles->contains('platform.name', 'Twitch'))
+                                <tr class="bg-white dark:bg-neutral-800 shadow-sm rounded-md">
+                                    <td class="py-2 px-4">
+                                        <div class="w-[50px] h-[50px]">
+                                            <img src="{{ $influencer->profile_picture_url !== '' ? asset('storage/' . $influencer->profile_picture_url) : asset('storage/img/influencer/placeholder-profile.png') }}"
+                                                alt="Foto de {{ $influencer->name }}"
+                                                class="w-full h-full rounded-full object-cover"
+                                                style="width: 50px; height: 50px;">
+                                        </div>
+                                    </td>
+                                    <td class="py-2 px-4 font-medium text-neutral-800 dark:text-white">
+                                        {{ $influencer->name }}
+                                    </td>
+                                    <td class="py-2 px-4 space-x-1">
+                                        <flux:avatar.group class="**:ring-zinc-100 dark:**:ring-zinc-800">
+                                            @foreach ($influencer->socialProfiles as $profile)
+                                                @if (Str::lower($profile->platform->name) == 'twitch')
+                                                    <a href="{{ $profile->profile_url ?? '#' }}" target="_blank"
+                                                        class="text-indigo-600 hover:underline">
+                                                        <flux:avatar circle src="{{asset('storage/img/platform/twitch.png')}}" />
+                                                    </a>
+                                                @endif
+                                            @endforeach
+                                        </flux:avatar.group>
+                                    </td>
+                                    <td class="py-2 px-4 text-neutral-700 dark:text-neutral-300">
+                                        {{ $influencer->socialProfiles->where('platform.name', 'Twitch')->sum('followers_count') }}
+                                    </td>
+                                </tr>
+                            @endif
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-</div>
 </x-layouts.app>
