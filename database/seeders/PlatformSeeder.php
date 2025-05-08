@@ -54,5 +54,10 @@ class PlatformSeeder extends Seeder
             'description' => 'Twitter is a microblogging platform that allows users to post and interact with messages known as "tweets".',
             'base_url'    => 'https://www.twitter.com/'
         ]);
+        Platform::create([
+            'name'        => 'Reddit',
+            'description' => 'Reddit is a social news aggregation, web content rating, and discussion website.',
+            'base_url'    => 'https://www.reddit.com/'
+        ]);
     }
 }
