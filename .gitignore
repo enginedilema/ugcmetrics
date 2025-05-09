@@ -3,6 +3,11 @@
 /public/build
 /public/hot
 /public/storage
+!/public/storage/img/
+!/public/storage/img/influencer/
+!/public/storage/img/influencer/placeholder-profile.png
+!/public/storage/img/platform/
+!/public/storage/img/platform/**
 /storage/*.key
 /storage/pail
 /vendor
