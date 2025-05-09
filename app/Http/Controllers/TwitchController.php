@@ -354,11 +354,11 @@ class TwitchController extends Controller
             }
 
             return redirect()->route('twitch.show', $username)
-                ->with('success', 'Datos actualizados correctamente desde la API de Twitch');
+                ->with('success', 'Datos actualizados correctamente desde Twitch.');
             
         } catch (\Exception $e) {
-            return redirect()->route('twitch.index')
-                ->with('error', 'Error al obtener datos de la API de Twitch: ' . $e->getMessage());
+            return redirect()->route('twitch.show', $username)
+                ->with('error', 'Ocurrió un error al obtener los datos: ' . $e->getMessage());
         }
     }
 }
