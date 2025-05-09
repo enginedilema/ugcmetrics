@@ -41,7 +41,14 @@ class InstagramInfluencersSeeder extends Seeder
                 'username' => $username, // Añadir el campo username que ahora es obligatorio
                 'profile_picture_url' => "" // Placeholder URL
             ]);
-            $imgURL = $data->data->user->profile_pic_url;
+            
+            // Check if data is valid and has the expected structure
+            if (is_object($data) && isset($data->data) && isset($data->data->user) && isset($data->data->user->profile_pic_url)) {
+                $imgURL = $data->data->user->profile_pic_url;
+            } else {
+                $this->command->warn("Could not get profile picture for {$username}, using default image");
+                $imgURL = "https://via.placeholder.com/150"; // Default image URL
+            }
             $imgPath = 'img/influencer/' . $username . '.jpg';
             Storage::disk('public')->put($imgPath, file_get_contents($imgURL));
             $influencer->profile_picture_url = $imgPath;
