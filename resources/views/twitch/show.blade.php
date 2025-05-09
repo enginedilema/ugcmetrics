@@ -1,5 +1,6 @@
 <x-layouts.app :title="__('Perfil de Twitch: ' . $profile->username)">
 <div class="container mx-auto px-4 py-8">
+    <!-- Alertas -->
     @if(session('info'))
         <div class="bg-blue-100 dark:bg-blue-900 border border-blue-400 dark:border-blue-700 text-blue-700 dark:text-blue-300 px-4 py-3 rounded relative mb-6" role="alert">
             <span class="block sm:inline">{{ session('info') }}</span>
@@ -18,17 +19,18 @@
         </div>
     @endif
     
-    <div class="flex justify-between items-center mb-8">
+    <!-- Encabezado con navegación y botón de actualizar -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div class="flex items-center">
-            <a href="{{ route('twitch.index') }}" class="mr-4 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-bold py-2 px-4 rounded inline-flex items-center">
+            <a href="{{ route('twitch.index') }}" class="mr-4 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-bold py-2 px-4 rounded inline-flex items-center transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
                 Volver
             </a>
-            <h1 class="text-3xl font-bold text-purple-700 dark:text-purple-400">Perfil de Twitch: {{ $profile->username }}</h1>
+            <h1 class="text-2xl md:text-3xl font-bold text-purple-700 dark:text-purple-400">Perfil de Twitch: {{ $profile->username }}</h1>
         </div>
-        <a href="{{ route('twitch.fetch', $profile->username) }}" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded inline-flex items-center">
+        <a href="{{ route('twitch.fetch', $profile->username) }}" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded inline-flex items-center transition-colors">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>
@@ -37,13 +39,14 @@
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-8">
+        <!-- Sidebar con información del perfil -->
         <div class="lg:col-span-1">
-            <div class="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+            <div class="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700 transition-colors">
                 <div class="flex flex-col items-center text-center mb-4">
                     @if($profile->profile_picture)
-                        <img src="{{ $profile->profile_picture }}" class="w-32 h-32 rounded-full object-cover border-4 border-purple-500 mb-4" alt="{{ $profile->username }}">
+                        <img src="{{ $profile->profile_picture }}" class="w-32 h-32 rounded-full object-cover border-4 border-purple-500 mb-4 hover:scale-105 transition-transform" alt="{{ $profile->username }}">
                     @elseif($profile->influencer && $profile->influencer->profile_picture_url)
-                        <img src="{{ asset('storage/' . $profile->influencer->profile_picture_url) }}" class="w-32 h-32 rounded-full object-cover border-4 border-purple-500 mb-4" alt="{{ $profile->username }}">
+                        <img src="{{ asset('storage/' . $profile->influencer->profile_picture_url) }}" class="w-32 h-32 rounded-full object-cover border-4 border-purple-500 mb-4 hover:scale-105 transition-transform" alt="{{ $profile->username }}">
                     @else
                         <div class="w-32 h-32 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center border-4 border-purple-500 mb-4">
                             <span class="text-4xl text-purple-600 dark:text-purple-400">{{ substr($profile->username, 0, 1) }}</span>
@@ -53,7 +56,7 @@
                     <p class="text-purple-600 dark:text-purple-400">@{{ $profile->username }}</p>
                     
                     <div class="mt-2">
-                        <a href="{{ $profile->profile_url }}" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center">
+                        <a href="{{ $profile->profile_url }}" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center hover:opacity-80 transition-opacity">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                             </svg>
@@ -70,11 +73,13 @@
                     @endif
                     
                     <div class="grid grid-cols-2 gap-4 mb-4">
-                        <div class="bg-gray-50 dark:bg-zinc-700 p-3 rounded text-center">
+                        <div class="bg-gray-50 dark:bg-zinc-700 p-3 rounded text-center hover:shadow-md transition">
                             <span class="block text-sm text-gray-500 dark:text-gray-400">Seguidores</span>
-                            <p class="text-xl font-bold dark:text-white">{{ number_format($profile->followers_count) }}</p>
+                            <p class="text-3xl font-bold text-purple-600 dark:text-purple-400">
+                                {{ number_format($latestMetrics->followers ?? 0) }}
+                            </p>
                         </div>
-                        <div class="bg-gray-50 dark:bg-zinc-700 p-3 rounded text-center">
+                        <div class="bg-gray-50 dark:bg-zinc-700 p-3 rounded text-center hover:shadow-md transition">
                             <span class="block text-sm text-gray-500 dark:text-gray-400">Vistas</span>
                             <p class="text-xl font-bold dark:text-white">{{ number_format($profile->extra_data['view_count'] ?? 0) }}</p>
                         </div>
@@ -112,260 +117,164 @@
             </div>
         </div>
         
+        <!-- Contenido principal -->
         <div class="lg:col-span-3">
-            <div class="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
-                <h3 class="text-xl font-semibold mb-4 dark:text-white">Estadísticas clave de los últimos 30 días</h3>
-                
-                @if(count($metrics) > 0)
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                        @php
-                            $lastMetric = $metrics->first();
-                            $firstMetric = $metrics->last();
-                            
-                            $avgViewers = $metrics->avg('average_viewers') ?: 0;
-                            $totalHoursStreamed = $metrics->sum('hours_streamed') ?: 0;
-                            $totalStreamCount = $metrics->sum('stream_count') ?: 0;
-                            $peakViewers = $metrics->max('peak_viewers') ?: 0;
-                            
-                            $followers = isset($lastMetric->followers) ? $lastMetric->followers : $profile->followers_count;
-                        @endphp
-                        
-                        <div class="text-center">
-                            <span class="text-gray-500 dark:text-gray-400 text-sm">Seguidores</span>
-                            <p class="text-2xl font-bold dark:text-white">{{ number_format($followers) }}</p>
+            <!-- Tarjetas de métricas -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <!-- Tarjeta de seguidores -->
+                <div class="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="rounded-full bg-purple-100 dark:bg-purple-900 p-3 mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-600 dark:text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
                         </div>
-                        
-                        <div class="text-center">
-                            <span class="text-gray-500 dark:text-gray-400 text-sm">Espectadores promedio</span>
-                            <p class="text-2xl font-bold dark:text-white">{{ number_format($avgViewers) }}</p>
-                        </div>
-                        
-                        <div class="text-center">
-                            <span class="text-gray-500 dark:text-gray-400 text-sm">Horas emitidas</span>
-                            <p class="text-2xl font-bold dark:text-white">{{ number_format($totalHoursStreamed) }}</p>
-                        </div>
-                        
-                        <div class="text-center">
-                            <span class="text-gray-500 dark:text-gray-400 text-sm">Pico de espectadores</span>
-                            <p class="text-2xl font-bold dark:text-white">{{ number_format($peakViewers) }}</p>
-                        </div>
-                    </div>
-                    
-                    @if($lastMetric && $firstMetric && $lastMetric->followers != $firstMetric->followers)
-                    <div class="mt-6">
-                        <h4 class="text-lg font-medium mb-3 dark:text-white">Crecimiento de seguidores</h4>
-                        <div class="bg-gray-50 dark:bg-zinc-700 p-4 rounded-lg">
+                        <h3 class="text-xl font-semibold dark:text-white mb-1">Seguidores</h3>
+                        <p class="text-3xl font-bold text-purple-600 dark:text-purple-400">{{ number_format($latestMetrics->followers ?? 0) }}</p>
+                        @if(isset($latestMetrics) && isset($profile->twitchMetrics) && $profile->twitchMetrics->count() > 1)
                             @php
-                                $growth = $lastMetric->followers - $firstMetric->followers;
-                                $growthPercent = $firstMetric->followers > 0 ? 
-                                    ($growth / $firstMetric->followers) * 100 : 0;
+                                $previousMetrics = $profile->twitchMetrics->skip(1)->first();
+                                $followerChange = $latestMetrics->followers - $previousMetrics->followers;
+                                $changePercentage = $previousMetrics->followers > 0 ? ($followerChange / $previousMetrics->followers) * 100 : 0;
                             @endphp
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">Inicial</p>
-                                    <p class="text-xl font-bold dark:text-white">{{ number_format($firstMetric->followers) }}</p>
-                                </div>
-                                <div class="text-center">
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">Cambio</p>
-                                    <p class="text-xl font-bold {{ $growth >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">
-                                        {{ $growth >= 0 ? '+' : '' }}{{ number_format($growth) }} ({{ number_format($growthPercent, 2) }}%)
-                                    </p>
-                                </div>
-                                <div class="text-right">
-                                    <p class="text-sm text-gray-500 dark:text-gray-400">Actual</p>
-                                    <p class="text-xl font-bold dark:text-white">{{ number_format($lastMetric->followers) }}</p>
-                                </div>
-                            </div>
-                        </div>
+                            <p class="mt-2 {{ $changePercentage >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">
+                                {{ $changePercentage >= 0 ? '+' : '' }}{{ number_format($followerChange) }} 
+                                ({{ number_format($changePercentage, 2) }}%)
+                            </p>
+                        @endif
                     </div>
-                    @endif
-                    
-                    <div class="mt-6">
-                        <h4 class="text-lg font-medium mb-3 dark:text-white">Últimos 30 días de actividad</h4>
-                        <div class="aspect-w-16 aspect-h-6 bg-gray-50 dark:bg-zinc-700 p-4 rounded-lg">
-                            <div class="flex items-center justify-center h-full">
-                                <p class="text-gray-500 dark:text-gray-400 text-center">
-                                    [Gráfico con datos diarios de espectadores y seguidores]
-                                </p>
-                            </div>
+                </div>
+
+                <!-- Tarjeta de visualizaciones -->
+                <div class="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="rounded-full bg-blue-100 dark:bg-blue-900 p-3 mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
                         </div>
+                        <h3 class="text-xl font-semibold dark:text-white mb-1">Visualizaciones</h3>
+                        <p class="text-3xl font-bold text-blue-600 dark:text-blue-400">{{ number_format($profile->extra_data['view_count'] ?? 0) }}</p>
+                    </div>
+                </div>
+
+                <!-- Tarjeta de espectadores -->
+                <div class="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow">
+                    <div class="flex flex-col items-center text-center">
+                        <div class="rounded-full bg-green-100 dark:bg-green-900 p-3 mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold dark:text-white mb-1">Espectadores Promedio</h3>
+                        <p class="text-3xl font-bold text-green-600 dark:text-green-400">{{ number_format($latestMetrics->average_viewers ?? 0) }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de Streams recientes -->
+            <div class="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700 mb-8">
+                <h3 class="text-xl font-semibold mb-4 dark:text-white flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                    Streams recientes
+                </h3>
+                
+                @if(isset($recentStreams) && $recentStreams->count() > 0)
+                    <div class="overflow-auto">
+                        <table class="min-w-full bg-white dark:bg-zinc-800">
+                            <thead class="bg-gray-100 dark:bg-zinc-700">
+                                <tr>
+                                    <th class="py-3 px-4 text-left dark:text-gray-300">Fecha</th>
+                                    <th class="py-3 px-4 text-left dark:text-gray-300">Título</th>
+                                    <th class="py-3 px-4 text-left dark:text-gray-300">Juego/Categoría</th>
+                                    <th class="py-3 px-4 text-right dark:text-gray-300">Duración</th>
+                                    <th class="py-3 px-4 text-right dark:text-gray-300">Visualizaciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($recentStreams as $stream)
+                                    <tr class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-zinc-700 transition-colors">
+                                        <td class="py-3 px-4 dark:text-gray-200">
+                                            {{ $stream->started_at ? \Carbon\Carbon::parse($stream->started_at)->format('d/m/Y') : 'N/A' }}
+                                        </td>
+                                        <td class="py-3 px-4">
+                                            @if($stream->stream_url)
+                                                <a href="{{ $stream->stream_url }}" target="_blank" class="text-blue-500 hover:underline dark:text-blue-400">
+                                                    {{ \Illuminate\Support\Str::limit($stream->title, 40) }}
+                                                </a>
+                                            @else
+                                                <span class="dark:text-gray-200">{{ \Illuminate\Support\Str::limit($stream->title, 40) }}</span>
+                                            @endif
+                                        </td>
+                                        <td class="py-3 px-4 dark:text-gray-200">{{ $stream->game_name ?? 'Sin categoría' }}</td>
+                                        <td class="py-3 px-4 text-right dark:text-gray-200">
+                                            @if($stream->duration_minutes)
+                                                {{ floor($stream->duration_minutes / 60) }}h {{ $stream->duration_minutes % 60 }}m
+                                            @else
+                                                -
+                                            @endif
+                                        </td>
+                                        <td class="py-3 px-4 text-right dark:text-gray-200">{{ number_format($stream->viewer_count ?? 0) }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 @else
-                    <div class="bg-gray-50 dark:bg-zinc-700 p-6 rounded-lg text-center">
-                        <p class="text-gray-500 dark:text-gray-400">No hay métricas disponibles para este perfil.</p>
+                    <div class="text-center py-8 bg-gray-50 dark:bg-zinc-700 rounded-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400 dark:text-gray-500 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                        <p class="text-gray-500 dark:text-gray-400">No hay streams disponibles para este perfil.</p>
+                        <p class="text-sm text-gray-400 dark:text-gray-500 mt-1">Intenta actualizar los datos para obtener la información más reciente.</p>
                     </div>
                 @endif
             </div>
-        </div>
-    </div>
-    
-    <div class="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700 mb-8">
-        <h3 class="text-xl font-semibold mb-4 dark:text-white">Streams recientes</h3>
-        
-        @if(count($streams) > 0)
-            <div class="overflow-auto">
-                <table class="min-w-full bg-white dark:bg-zinc-800">
-                    <thead class="bg-gray-100 dark:bg-zinc-700">
-                        <tr>
-                            <th class="py-3 px-4 text-left dark:text-gray-300">Fecha</th>
-                            <th class="py-3 px-4 text-left dark:text-gray-300">Título</th>
-                            <th class="py-3 px-4 text-left dark:text-gray-300">Juego/Categoría</th>
-                            <th class="py-3 px-4 text-right dark:text-gray-300">Duración</th>
-                            <th class="py-3 px-4 text-right dark:text-gray-300">Espectadores pico</th>
-                            <th class="py-3 px-4 text-right dark:text-gray-300">Espectadores promedio</th>
-                            <th class="py-3 px-4 text-right dark:text-gray-300">Seguidores ganados</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                        @foreach($streams as $stream)
-                            <tr class="hover:bg-gray-50 dark:hover:bg-zinc-700">
-                                <td class="py-3 px-4 dark:text-gray-300">
-                                    @if(is_string($stream->started_at))
-                                        {{ date('d/m/Y H:i', strtotime($stream->started_at)) }}
-                                    @else
-                                        {{ $stream->started_at->format('d/m/Y H:i') }}
-                                    @endif
-                                </td>
-                                <td class="py-3 px-4 max-w-xs truncate dark:text-gray-300">
-                                    <a href="{{ $stream->stream_url ?? '#' }}" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">
-                                        {{ $stream->title }}
-                                    </a>
-                                </td>
-                                <td class="py-3 px-4 dark:text-gray-300">{{ $stream->game_name }}</td>
-                                <td class="py-3 px-4 text-right dark:text-gray-300">
-                                    {{ floor($stream->duration_minutes / 60) }}h {{ $stream->duration_minutes % 60 }}m
-                                </td>
-                                <td class="py-3 px-4 text-right dark:text-gray-300">{{ number_format($stream->peak_viewers) }}</td>
-                                <td class="py-3 px-4 text-right dark:text-gray-300">{{ number_format($stream->average_viewers) }}</td>
-                                <td class="py-3 px-4 text-right {{ $stream->followers_gained > 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">
-                                    {{ $stream->followers_gained > 0 ? '+' : '' }}{{ number_format($stream->followers_gained) }}
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-            
-            <div class="mt-6">
-                {{ $streams->links() }}
-            </div>
-        @else
-            <div class="bg-gray-50 dark:bg-zinc-700 p-6 rounded-lg text-center">
-                <p class="text-gray-500 dark:text-gray-400">No hay streams disponibles para este perfil.</p>
-            </div>
-        @endif
-    </div>
-    
-    <div class="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700 mb-8">
-        <h3 class="text-xl font-semibold mb-4 dark:text-white">Reportes mensuales</h3>
-        
-        @if(count($reports) > 0)
-            <div class="overflow-x-auto">
-                <table class="min-w-full bg-white dark:bg-zinc-800">
-                    <thead class="bg-gray-100 dark:bg-zinc-700">
-                        <tr>
-                            <th class="py-3 px-4 text-left dark:text-gray-300">Período</th>
-                            <th class="py-3 px-4 text-right dark:text-gray-300">Seguidores inicio</th>
-                            <th class="py-3 px-4 text-right dark:text-gray-300">Seguidores fin</th>
-                            <th class="py-3 px-4 text-right dark:text-gray-300">Crecimiento</th>
-                            <th class="py-3 px-4 text-right dark:text-gray-300">Subs promedio</th>
-                            <th class="py-3 px-4 text-right dark:text-gray-300">Viewers promedio</th>
-                            <th class="py-3 px-4 text-right dark:text-gray-300">Viewers pico</th>
-                            <th class="py-3 px-4 text-right dark:text-gray-300">Horas emitidas</th>
-                            <th class="py-3 px-4 text-right dark:text-gray-300">Streams/semana</th>
-                            <th class="py-3 px-4 text-right dark:text-gray-300">Valor patrocinio</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                        @foreach($reports as $report)
-                            <tr class="hover:bg-gray-50 dark:hover:bg-zinc-700">
-                                <td class="py-3 px-4 dark:text-gray-300">{{ $report->month }}/{{ $report->year }}</td>
-                                <td class="py-3 px-4 text-right dark:text-gray-300">{{ number_format($report->followers_start) }}</td>
-                                <td class="py-3 px-4 text-right dark:text-gray-300">{{ number_format($report->followers_end) }}</td>
-                                <td class="py-3 px-4 text-right {{ $report->growth_rate >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">
-                                    {{ $report->growth_rate >= 0 ? '+' : '' }}{{ number_format($report->growth_rate, 2) }}%
-                                </td>
-                                <td class="py-3 px-4 text-right dark:text-gray-300">{{ number_format($report->subscribers_average) }}</td>
-                                <td class="py-3 px-4 text-right dark:text-gray-300">{{ number_format($report->average_viewers) }}</td>
-                                <td class="py-3 px-4 text-right dark:text-gray-300">{{ number_format($report->peak_viewers) }}</td>
-                                <td class="py-3 px-4 text-right dark:text-gray-300">{{ number_format($report->hours_streamed) }}</td>
-                                <td class="py-3 px-4 text-right dark:text-gray-300">{{ number_format($report->streams_per_week, 1) }}</td>
-                                <td class="py-3 px-4 text-right dark:text-gray-300">
-                                    ${{ number_format($report->estimated_sponsor_value_min) }} - ${{ number_format($report->estimated_sponsor_value_max) }}
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-            
-            @if($reports->count() > 0 && $reports->first()->top_categories)
-                <div class="mt-6">
-                    <h4 class="text-lg font-medium mb-3 dark:text-white">Categorías más usadas (último reporte)</h4>
-                    <div class="flex flex-wrap gap-2">
-                        @foreach($reports->first()->top_categories as $category => $count)
-                            <span class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-300 px-3 py-1 rounded-full text-sm">
-                                {{ $category }} ({{ $count }})
-                            </span>
+
+            <!-- Reportes mensuales -->
+            @if(isset($monthlyReports) && $monthlyReports->count() > 0)
+                <div class="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                    <h3 class="text-xl font-semibold dark:text-white mb-4 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                        Reportes Mensuales
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        @foreach($monthlyReports as $report)
+                            <div class="border border-gray-100 dark:border-zinc-700 rounded-lg p-4 hover:shadow-md transition-shadow">
+                                <h4 class="font-medium text-lg dark:text-white">{{ $report->getMonthNameAttribute() }} {{ $report->year }}</h4>
+                                <div class="grid grid-cols-2 gap-2 mt-3">
+                                    <div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Seguidores</p>
+                                        <p class="font-medium dark:text-white">{{ number_format($report->followers_end) }}</p>
+                                        <p class="text-xs {{ $report->growth_rate >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">
+                                            {{ $report->growth_rate >= 0 ? '+' : '' }}{{ number_format($report->growth_rate, 1) }}%
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Streams</p>
+                                        <p class="font-medium dark:text-white">{{ $report->streams_count }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Horas</p>
+                                        <p class="font-medium dark:text-white">{{ number_format($report->hours_streamed, 1) }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Espectadores</p>
+                                        <p class="font-medium dark:text-white">{{ number_format($report->average_viewers) }}</p>
+                                    </div>
+                                </div>
+                            </div>
                         @endforeach
                     </div>
                 </div>
             @endif
-        @else
-            <div class="bg-gray-50 dark:bg-zinc-700 p-6 rounded-lg text-center">
-                <p class="text-gray-500 dark:text-gray-400">No hay reportes disponibles para este perfil.</p>
-            </div>
-        @endif
-    </div>
-    
-    <div class="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
-        <h3 class="text-xl font-semibold mb-4 dark:text-white">Valoración financiera estimada</h3>
-        
-        @if(count($reports) > 0)
-            @php
-                $latestReport = $reports->first();
-            @endphp
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-gray-50 dark:bg-zinc-700 p-6 rounded-lg">
-                    <h4 class="font-medium mb-2 dark:text-white">Ingresos mensuales estimados</h4>
-                    <p class="text-2xl font-bold dark:text-white">${{ number_format(($latestReport->estimated_monthly_revenue_min + $latestReport->estimated_monthly_revenue_max) / 2) }}</p>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">
-                        Rango: ${{ number_format($latestReport->estimated_monthly_revenue_min) }} - ${{ number_format($latestReport->estimated_monthly_revenue_max) }}
-                    </p>
-                </div>
-                
-                <div class="bg-gray-50 dark:bg-zinc-700 p-6 rounded-lg">
-                    <h4 class="font-medium mb-2 dark:text-white">Valor de patrocinio por stream</h4>
-                    <p class="text-2xl font-bold dark:text-white">${{ number_format($latestReport->estimated_sponsor_value_optimal) }}</p>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">
-                        Rango: ${{ number_format($latestReport->estimated_sponsor_value_min) }} - ${{ number_format($latestReport->estimated_sponsor_value_max) }}
-                    </p>
-                </div>
-                
-                <div class="bg-gray-50 dark:bg-zinc-700 p-6 rounded-lg">
-                    <h4 class="font-medium mb-2 dark:text-white">Métricas clave de monetización</h4>
-                    <div class="grid grid-cols-2 gap-2 mt-2">
-                        <div>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">Subs promedio</p>
-                            <p class="font-medium dark:text-white">{{ number_format($latestReport->subscribers_average) }}</p>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">Engagement</p>
-                            <p class="font-medium dark:text-white">{{ number_format($latestReport->chat_engagement, 2) }} msg/min</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="mt-6 text-sm text-gray-500 dark:text-gray-400">
-                <p>* Estas estimaciones se basan en métricas públicas y comportamientos promedio de la industria.</p>
-                <p>* Los ingresos reales pueden variar según acuerdos comerciales específicos, donaciones y otras fuentes de ingresos.</p>
-            </div>
-        @else
-            <div class="bg-gray-50 dark:bg-zinc-700 p-6 rounded-lg text-center">
-                <p class="text-gray-500 dark:text-gray-400">No hay suficientes datos para estimar la valoración financiera.</p>
-            </div>
-        @endif
+        </div>
     </div>
 </div>
 </x-layouts.app>

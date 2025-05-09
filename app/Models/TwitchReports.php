@@ -39,4 +39,9 @@ class TwitchReports extends Model
     {
         return $this->belongsTo(SocialProfile::class);
     }
+
+    public function getMonthNameAttribute()
+    {
+        return \Carbon\Carbon::create()->month($this->month)->locale('es_ES')->monthName;
+    }
 }
