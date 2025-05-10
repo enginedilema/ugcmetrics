@@ -27,7 +27,8 @@ return new class extends Migration
             $table->float('hours_streamed')->nullable();
             $table->float('streams_per_week')->nullable();
             $table->float('chat_engagement')->nullable(); // Mensajes por minuto promedio
-            
+            $table->integer('streams_count')->default(0);
+            $table->json('game_distribution')->nullable();
             // Datos de estimación económica
             $table->float('estimated_monthly_revenue_min')->nullable();
             $table->float('estimated_monthly_revenue_max')->nullable();
