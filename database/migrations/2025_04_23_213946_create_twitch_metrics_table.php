@@ -14,19 +14,30 @@ return new class extends Migration
         Schema::create('twitch_metrics', function (Blueprint $table) {
             $table->id();
             $table->foreignId('social_profile_id')->constrained()->onDelete('cascade');
+        
+            // clave única día‑perfil
             $table->date('date');
-            $table->integer('followers')->nullable();
-            $table->integer('subscribers')->nullable();
-            $table->float('average_viewers')->nullable();
-            $table->integer('peak_viewers')->nullable();
-            $table->float('hours_streamed')->nullable();
-            $table->integer('stream_count')->nullable();
-            $table->integer('chat_messages')->nullable();
-            $table->timestamps();
-            
-            // Índice compuesto para evitar duplicados
             $table->unique(['social_profile_id', 'date']);
+        
+            // MÉTRICAS
+            $table->unsignedBigInteger('followers')->nullable();
+            $table->unsignedBigInteger('views')->nullable();
+            $table->unsignedInteger('subscribers')->nullable();
+        
+            $table->float('average_viewers')->nullable();
+            $table->unsignedInteger('peak_viewers')->nullable();
+        
+            $table->float('hours_streamed')->nullable();
+            $table->unsignedInteger('stream_count')->nullable();
+            $table->unsignedInteger('chat_messages')->nullable();
+        
+            // flags + json
+            $table->boolean('is_live')->default(false);
+            $table->json('extra_data')->nullable();
+        
+            $table->timestamps();
         });
+        
     }
 
     /**
