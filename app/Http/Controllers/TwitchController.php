@@ -59,13 +59,6 @@ class TwitchController extends Controller
                 ->with('error', 'Plataforma Twitch no encontrada');
         }
 
-        try {
-            $this->syncProfile($username);
-        } catch (\Exception $e) {
-            \Log::warning("Sync fallido para {$username}: ".$e->getMessage());
-            session()->flash('error','No se pudieron actualizar métricas');
-        }
-        
         // Obtener el perfil con sus relaciones
         $profile = SocialProfile::where('platform_id', $platform->id)
             ->where('username', $username)
@@ -660,11 +653,11 @@ private function saveUserData(array $userData, string $username, ?array $followe
         }
 
     }
-    
+
      /**
      * Sincroniza datos de Twitch (perfil, streams, métricas y reportes)
      */
-     private function syncProfile(string $username): void
+     public function syncProfile(string $username): void
     {
         $accessToken = $this->getAccessToken();
         $clientId    = env('TWITCH_CLIENT_ID');
