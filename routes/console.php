@@ -11,3 +11,10 @@ Artisan::command('inspire', function () {
 
 Schedule::command('instagram:generate-reports')
     ->monthlyOn(30, '23:50'); // o cambia el día/hora si lo prefieres
+
+// Comandos para Twitter
+Schedule::command('twitter:fetch-data')
+    ->hourly(); // Actualización más frecuente para Twitter
+
+Schedule::command('twitter:generate-reports')
+    ->monthlyOn(1, '00:00'); // Generar informes al inicio del mes

@@ -71,6 +71,37 @@ class SocialProfile extends Model
     }
 
     /**
+     * Get the Twitter metrics associated with the social profile.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function twitterMetrics(): HasMany
+    {
+        return $this->hasMany(TwitterMetrics::class)
+                    ->whereHas('platform', fn ($q) => $q->where('name', 'Twitter'));
+    }
+
+    /**
+     * Get the Twitter posts associated with the social profile.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function twitterPosts(): HasMany
+    {
+        return $this->hasMany(TwitterPost::class);
+    }
+
+    /**
+     * Get the Twitter reports associated with the social profile.
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function twitterReports(): HasMany
+    {
+        return $this->hasMany(TwitterReports::class);
+    }
+
+    /**
      * Get the Twitch metrics associated with the social profile.
      * 
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

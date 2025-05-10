@@ -41,6 +41,8 @@ class SocialProfileController extends Controller
         //Si el perfil social es de tipo Instagram, redirigir a la vista de Instagram
         if($socialProfile->platform == Platform::where('name','Instagram')->first()){
             return view('instagram.show',compact('socialProfile'));
+        } else if($socialProfile->platform == Platform::where('name','Twitter')->first()){
+            return view('twitter.show',compact('socialProfile'));
         }
     }
 
