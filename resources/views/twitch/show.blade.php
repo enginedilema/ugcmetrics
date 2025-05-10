@@ -1,16 +1,16 @@
 @php
-// Mapa idioma (ISO 639-1) → país (ISO 3166-1 alpha2)
-$flagMap = [
-'en' => 'gb', // inglés → Reino Unido (union jack)
-'es' => 'es', // español → España
-'pt' => 'pt', // portugués → Portugal
-'fr' => 'fr', // francés → Francia
-'de' => 'de', // alemán → Alemania
-'ja' => 'jp', // japonés → Japón
-'zh' => 'cn', // chino → China
-'ru' => 'ru', // ruso → Rusia
-// añade los que necesites…
-];
+    // Mapa idioma (ISO 639-1) → país (ISO 3166-1 alpha2)
+    $flagMap = [
+        'en' => 'gb', // inglés → Reino Unido (union jack)
+        'es' => 'es', // español → España
+        'pt' => 'pt', // portugués → Portugal
+        'fr' => 'fr', // francés → Francia
+        'de' => 'de', // alemán → Alemania
+        'ja' => 'jp', // japonés → Japón
+        'zh' => 'cn', // chino → China
+        'ru' => 'ru', // ruso → Rusia
+        // añade los que necesites…
+    ];
 @endphp
 <x-layouts.app :title="__('Perfil de Twitch: ' . $profile->username)">
     <div class="container mx-auto px-4 py-8">
@@ -71,34 +71,34 @@ $flagMap = [
                     class="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700 transition-colors">
                     <div class="flex flex-col items-center text-center mb-4">
                         <div class="relative inline-block mb-4">
-                            @if($profile->profile_picture)
-                            <img src="{{ $profile->profile_picture }}"
-                                class="w-32 h-32 rounded-full object-cover border-4 border-purple-500 hover:scale-105 transition-transform"
-                                alt="{{ $profile->username }}">
+                            @if ($profile->profile_picture)
+                                <img src="{{ $profile->profile_picture }}"
+                                    class="w-32 h-32 rounded-full object-cover border-4 border-purple-500 hover:scale-105 transition-transform"
+                                    alt="{{ $profile->username }}">
                             @elseif($profile->influencer && $profile->influencer->profile_picture_url)
-                            <img src="{{ asset('storage/' . $profile->influencer->profile_picture_url) }}"
-                                class="w-32 h-32 rounded-full object-cover border-4 border-purple-500 hover:scale-105 transition-transform"
-                                alt="{{ $profile->username }}">
+                                <img src="{{ asset('storage/' . $profile->influencer->profile_picture_url) }}"
+                                    class="w-32 h-32 rounded-full object-cover border-4 border-purple-500 hover:scale-105 transition-transform"
+                                    alt="{{ $profile->username }}">
                             @else
-                            <div
-                                class="w-32 h-32 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center border-4 border-purple-500">
-                                <span class="text-4xl text-purple-600 dark:text-purple-400">
-                                    {{ substr($profile->username, 0, 1) }}
-                                </span>
-                            </div>
+                                <div
+                                    class="w-32 h-32 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center border-4 border-purple-500">
+                                    <span class="text-4xl text-purple-600 dark:text-purple-400">
+                                        {{ substr($profile->username, 0, 1) }}
+                                    </span>
+                                </div>
                             @endif
 
                             @php
-                            $latest = $profile->twitchMetrics->first();
+                                $latest = $profile->twitchMetrics->first();
                             @endphp
 
                             {{-- INDICADOR “EN VIVO” --}}
-                            @if(optional($latest)->is_live)
-                            <span class="absolute top-0 right-0 block w-10 h-10">
-                                <span
-                                    class="absolute inline-flex w-full h-full rounded-full bg-sky-400 opacity-75 animate-ping"></span>
-                                <span class="relative inline-flex w-full h-full rounded-full bg-sky-500"></span>
-                            </span>
+                            @if (optional($latest)->is_live)
+                                <span class="absolute top-0 right-0 block w-10 h-10">
+                                    <span
+                                        class="absolute inline-flex w-full h-full rounded-full bg-sky-400 opacity-75 animate-ping"></span>
+                                    <span class="relative inline-flex w-full h-full rounded-full bg-sky-500"></span>
+                                </span>
                             @endif
                         </div>
 
@@ -185,7 +185,7 @@ $flagMap = [
             <!-- Contenido principal -->
             <div class="lg:col-span-3">
                 <!-- Tarjetas de métricas -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
                     <!-- Tarjeta de seguidores -->
                     <div
                         class="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow">
@@ -235,12 +235,10 @@ $flagMap = [
                             </div>
                             <h3 class="text-xl font-semibold dark:text-white mb-1">Visualizaciones medias</h3>
                             @php
-                                $avgViewers = 0;
-                                if (isset($recentStreams) && $recentStreams->count() > 0) {
-                                    $totalViewers = $recentStreams->sum('viewer_count');
-                                    $streamCount = $recentStreams->count();
-                                    $avgViewers = $streamCount > 0 ? round($totalViewers / $streamCount) : 0;
-                                }
+                                $avgViewers =
+                                    isset($recentStreams) && $recentStreams->count() > 0
+                                        ? $recentStreams->avg('viewer_count')
+                                        : 0;
                             @endphp
                             <p class="text-3xl font-bold text-blue-600 dark:text-blue-400">
                                 {{ number_format($avgViewers) }}</p>
@@ -264,11 +262,8 @@ $flagMap = [
                                 {{ number_format($latestMetrics->average_viewers ?? 0) }}</p>
                         </div>
                     </div>
-                </div>
 
-                <!-- Segunda fila de métricas -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                    <!-- Tarjeta de días de retransmisión de la última semana -->
+                    <!-- Tarjeta de días de retransmisión -->
                     <div
                         class="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow">
                         <div class="flex flex-col items-center text-center">
@@ -280,57 +275,53 @@ $flagMap = [
                                         d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
                             </div>
-                            <h3 class="text-xl font-semibold dark:text-white mb-1">Retransmisiones de la última semana
-                            </h3>
+                            <h3 class="text-xl font-semibold dark:text-white mb-1">Días de retransmisión</h3>
                             @php
-                                $daysStreamed = 0;
-                                if (isset($recentStreams) && $recentStreams->count() > 0) {
-                                    $lastWeek = \Carbon\Carbon::now()->subDays(7);
-                                    $uniqueDays = $recentStreams
-                                        ->filter(function ($stream) use ($lastWeek) {
+                                $weekAgo = \Carbon\Carbon::now()->subDays(7);
+                                $streamDays = isset($recentStreams)
+                                    ? $recentStreams
+                                        ->filter(function ($stream) use ($weekAgo) {
                                             return $stream->started_at &&
-                                                \Carbon\Carbon::parse($stream->started_at)->isAfter($lastWeek);
+                                                \Carbon\Carbon::parse($stream->started_at)->isAfter($weekAgo);
                                         })
                                         ->groupBy(function ($stream) {
                                             return \Carbon\Carbon::parse($stream->started_at)->format('Y-m-d');
                                         })
-                                        ->count();
-                                    $daysStreamed = $uniqueDays;
-                                }
+                                        ->count()
+                                    : 0;
                             @endphp
                             <p class="text-3xl font-bold text-yellow-600 dark:text-yellow-400">
-                                {{ $daysStreamed }}</p>
+                                {{ $streamDays }}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Última semana</p>
                         </div>
                     </div>
 
-                    <!-- Tarjeta de horas de transmisión de la última semana -->
+                    <!-- Tarjeta de horas de transmisión -->
                     <div
                         class="bg-white dark:bg-zinc-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow">
                         <div class="flex flex-col items-center text-center">
-                            <div class="rounded-full bg-red-100 dark:bg-red-900 p-3 mb-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-600 dark:text-red-400"
-                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <div class="rounded-full bg-indigo-100 dark:bg-indigo-900 p-3 mb-4">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="h-8 w-8 text-indigo-600 dark:text-indigo-400" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                             </div>
-                            <h3 class="text-xl font-semibold dark:text-white mb-1">Horas de retransmisión de la última
-                                semana</h3>
+                            <h3 class="text-xl font-semibold dark:text-white mb-1">Horas de transmisión</h3>
                             @php
-                                $hoursStreamed = 0;
-                                if (isset($recentStreams) && $recentStreams->count() > 0) {
-                                    $lastWeek = \Carbon\Carbon::now()->subDays(7);
-                                    $totalMinutes = $recentStreams
-                                        ->filter(function ($stream) use ($lastWeek) {
-                                            return $stream->started_at &&
-                                                \Carbon\Carbon::parse($stream->started_at)->isAfter($lastWeek);
-                                        })
-                                        ->sum('duration_minutes');
-                                    $hoursStreamed = round($totalMinutes / 60, 1);
-                                }
+                                $weeklyHours = isset($recentStreams)
+                                    ? $recentStreams
+                                            ->filter(function ($stream) use ($weekAgo) {
+                                                return $stream->started_at &&
+                                                    \Carbon\Carbon::parse($stream->started_at)->isAfter($weekAgo);
+                                            })
+                                            ->sum('duration_minutes') / 60
+                                    : 0;
                             @endphp
-                            <p class="text-3xl font-bold text-red-600 dark:text-red-400">
-                                {{ $hoursStreamed }}h</p>
+                            <p class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">
+                                {{ number_format($weeklyHours, 1) }}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Última semana</p>
                         </div>
                     </div>
                 </div>
@@ -347,130 +338,132 @@ $flagMap = [
                         Streams recientes
                     </h3>
 
-                    @if(isset($recentStreams) && $recentStreams->count() > 0)
-                    <div class="overflow-auto">
-                        <table class="min-w-full bg-white dark:bg-zinc-800">
-                            <thead class="bg-gray-100 dark:bg-zinc-700">
-                                <tr>
-                                    <th class="py-3 px-4 text-left dark:text-gray-300">Stream</th>
-                                    <th class="py-3 px-4 text-left dark:text-gray-300">Título</th>
-                                    <th class="py-3 px-4 text-left dark:text-gray-300">Juego/Categoría</th>
-                                    <th class="py-3 px-4 text-right dark:text-gray-300">Duración</th>
-                                    <th class="py-3 px-4 text-right dark:text-gray-300">Views</th>
-                                    <th class="py-3 px-4 text-center dark:text-gray-300">Lang</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($recentStreams as $stream)
-                                @php
-                                // Construir miniatura
-                                $thumb = null;
-                                if (!empty($stream->thumbnail_url)) {
-                                $thumb = str_replace(
-                                ['%{width}', '%{height}'],
-                                ['320','180'],
-                                $stream->thumbnail_url
-                                );
-                                }
-                                $started = $stream->started_at
-                                ? \Carbon\Carbon::parse($stream->started_at)->format('d/m/Y')
-                                : 'N/A';
-                                @endphp
-
-                                <tr
-                                    class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-zinc-700 transition-colors">
-                                    {{-- Preview + Fecha debajo --}}
-                                    <td class="py-3 px-4 group">
-                                        <a href="{{ $stream->stream_url }}" target="_blank"
-                                            class="relative block w-40 h-24 rounded overflow-hidden border-2 border-transparent transition-colors group-hover:border-4 group-hover:border-sky-400">
-                                            @if($stream->is_live)
-                                            <iframe
-                                                src="https://player.twitch.tv/?channel={{ $profile->username }}&parent={{ request()->getHost() }}"
-                                                frameborder="0" allowfullscreen scrolling="no"
-                                                class="w-full h-full object-cover">
-                                            </iframe>
-                                            @elseif($thumb)
-                                            <img src="{{ $thumb }}" alt="Preview {{ $stream->title }}"
-                                                class="w-full h-full object-cover">
-                                            @else
-                                            <div
-                                                class="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-zinc-700">
-                                                <span class="text-xs text-gray-400">No preview</span>
-                                            </div>
-                                            @endif
-
-                                            <div
-                                                class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                    class="h-12 w-12 text-white opacity-85 transform transition-transform group-hover:scale-125"
-                                                    fill="currentColor" viewBox="0 0 20 20">
-                                                    <path d="M6.5 5.5v9l7-4.5-7-4.5z" />
-                                                </svg>
-                                            </div>
-                                        </a>
-                                        <p class="mt-2 text-xs font-mono text-gray-500 dark:text-gray-400">
-                                            {{ $started }}</p>
-                                    </td>
-
-
-                                    {{-- Título --}}
-                                    <td class="py-3 px-4">
-                                        @if($stream->stream_url)
-                                        <a href="{{ $stream->stream_url }}" target="_blank"
-                                            class="text-blue-500 hover:underline dark:text-blue-400">
-                                            {{ \Illuminate\Support\Str::limit($stream->title, 40) }}
-                                        </a>
-                                        @else
-                                        <span class="dark:text-gray-200">
-                                            {{ \Illuminate\Support\Str::limit($stream->title, 40) }}
-                                        </span>
-                                        @endif
-                                    </td>
-
-                                    {{-- Juego/Categoría --}}
-                                    <td class="py-3 px-4 dark:text-gray-200">
-                                        {{ $stream->game_name ?? 'Sin categoría' }}
-                                    </td>
-
-                                    {{-- Duración --}}
-                                    <td class="py-3 px-4 text-right dark:text-gray-200">
-                                        @if($stream->duration_minutes)
-                                        {{ floor($stream->duration_minutes / 60) }}h
-                                        {{ $stream->duration_minutes % 60 }}m
-                                        @else
-                                        –
-                                        @endif
-                                    </td>
-
-                                    {{-- Views --}}
-                                    <td class="py-3 px-4 text-right dark:text-gray-200">
-                                        {{ number_format($stream->viewer_count ?? 0) }}
-                                    </td>
-
-                                    {{-- Idioma --}}
-                                    <td class="py-3 px-4 align-middle text-center">
+                    @if (isset($recentStreams) && $recentStreams->count() > 0)
+                        <div class="overflow-auto">
+                            <table class="min-w-full bg-white dark:bg-zinc-800">
+                                <thead class="bg-gray-100 dark:bg-zinc-700">
+                                    <tr>
+                                        <th class="py-3 px-4 text-left dark:text-gray-300">Stream</th>
+                                        <th class="py-3 px-4 text-left dark:text-gray-300">Título</th>
+                                        <th class="py-3 px-4 text-left dark:text-gray-300">Juego/Categoría</th>
+                                        <th class="py-3 px-4 text-right dark:text-gray-300">Duración</th>
+                                        <th class="py-3 px-4 text-right dark:text-gray-300">Views</th>
+                                        <th class="py-3 px-4 text-center dark:text-gray-300">Lang</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($recentStreams as $stream)
                                         @php
-                                        $lang = strtolower($stream->language ?? '');
-                                        $cc = $flagMap[$lang] ?? null;
+                                            // Construir miniatura
+                                            $thumb = null;
+                                            if (!empty($stream->thumbnail_url)) {
+                                                $thumb = str_replace(
+                                                    ['%{width}', '%{height}'],
+                                                    ['320', '180'],
+                                                    $stream->thumbnail_url,
+                                                );
+                                            }
+                                            $started = $stream->started_at
+                                                ? \Carbon\Carbon::parse($stream->started_at)->format('d/m/Y')
+                                                : 'N/A';
                                         @endphp
 
-                                        @if($cc)
-                                        <span class="inline-flex items-center space-x-1">
-                                            <img src="https://flagcdn.com/48x36/{{ $cc }}.png"
-                                                alt="{{ strtoupper($lang) }}" class="w-8 h-6 rounded-sm align-middle">
-                                            <span
-                                                class="align-middle text-sm font-medium">{{ strtoupper($lang) }}</span>
-                                        </span>
-                                        @else
-                                        <span class="text-sm font-medium">-</span>
-                                        @endif
-                                    </td>
+                                        <tr
+                                            class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-zinc-700 transition-colors">
+                                            {{-- Preview + Fecha debajo --}}
+                                            <td class="py-3 px-4 group">
+                                                <a href="{{ $stream->stream_url }}" target="_blank"
+                                                    class="relative block w-40 h-24 rounded overflow-hidden border-2 border-transparent transition-colors group-hover:border-4 group-hover:border-sky-400">
+                                                    @if ($stream->is_live)
+                                                        <iframe
+                                                            src="https://player.twitch.tv/?channel={{ $profile->username }}&parent={{ request()->getHost() }}"
+                                                            frameborder="0" allowfullscreen scrolling="no"
+                                                            class="w-full h-full object-cover">
+                                                        </iframe>
+                                                    @elseif($thumb)
+                                                        <img src="{{ $thumb }}"
+                                                            alt="Preview {{ $stream->title }}"
+                                                            class="w-full h-full object-cover">
+                                                    @else
+                                                        <div
+                                                            class="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-zinc-700">
+                                                            <span class="text-xs text-gray-400">No preview</span>
+                                                        </div>
+                                                    @endif
 
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                                                    <div
+                                                        class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                            class="h-12 w-12 text-white opacity-85 transform transition-transform group-hover:scale-125"
+                                                            fill="currentColor" viewBox="0 0 20 20">
+                                                            <path d="M6.5 5.5v9l7-4.5-7-4.5z" />
+                                                        </svg>
+                                                    </div>
+                                                </a>
+                                                <p class="mt-2 text-xs font-mono text-gray-500 dark:text-gray-400">
+                                                    {{ $started }}</p>
+                                            </td>
+
+
+                                            {{-- Título --}}
+                                            <td class="py-3 px-4">
+                                                @if ($stream->stream_url)
+                                                    <a href="{{ $stream->stream_url }}" target="_blank"
+                                                        class="text-blue-500 hover:underline dark:text-blue-400">
+                                                        {{ \Illuminate\Support\Str::limit($stream->title, 40) }}
+                                                    </a>
+                                                @else
+                                                    <span class="dark:text-gray-200">
+                                                        {{ \Illuminate\Support\Str::limit($stream->title, 40) }}
+                                                    </span>
+                                                @endif
+                                            </td>
+
+                                            {{-- Juego/Categoría --}}
+                                            <td class="py-3 px-4 dark:text-gray-200">
+                                                {{ $stream->game_name ?? 'Sin categoría' }}
+                                            </td>
+
+                                            {{-- Duración --}}
+                                            <td class="py-3 px-4 text-right dark:text-gray-200">
+                                                @if ($stream->duration_minutes)
+                                                    {{ floor($stream->duration_minutes / 60) }}h
+                                                    {{ $stream->duration_minutes % 60 }}m
+                                                @else
+                                                    –
+                                                @endif
+                                            </td>
+
+                                            {{-- Views --}}
+                                            <td class="py-3 px-4 text-right dark:text-gray-200">
+                                                {{ number_format($stream->viewer_count ?? 0) }}
+                                            </td>
+
+                                            {{-- Idioma --}}
+                                            <td class="py-3 px-4 align-middle text-center">
+                                                @php
+                                                    $lang = strtolower($stream->language ?? '');
+                                                    $cc = $flagMap[$lang] ?? null;
+                                                @endphp
+
+                                                @if ($cc)
+                                                    <span class="inline-flex items-center space-x-1">
+                                                        <img src="https://flagcdn.com/48x36/{{ $cc }}.png"
+                                                            alt="{{ strtoupper($lang) }}"
+                                                            class="w-8 h-6 rounded-sm align-middle">
+                                                        <span
+                                                            class="align-middle text-sm font-medium">{{ strtoupper($lang) }}</span>
+                                                    </span>
+                                                @else
+                                                    <span class="text-sm font-medium">-</span>
+                                                @endif
+                                            </td>
+
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     @else
                         <div class="text-center py-8 bg-gray-50 dark:bg-zinc-700 rounded-lg">
                             <svg xmlns="http://www.w3.org/2000/svg"
