@@ -118,21 +118,6 @@ class TwitchInfluencersSeeder extends Seeder
                 ]);
             }
 
-            // 3b. Descarga y guarda el avatar usando Laravel HTTP Client
-            $response = Http::withHeaders([
-                'User-Agent' => 'ugcmetrics-bot/1.0'
-            ])->get($user['avatar']);
-
-            if ($response->successful()) {
-                $path = "images/{$user['username']}.png";
-                Storage::disk('public')->put($path, $response->body());
-                // Si tu modelo Influencer tiene la propiedad, guárdalo:
-                // $influencer->profile_picture_url = $path;
-                // $influencer->save();
-            } else {
-                $this->command->warn("No se pudo descargar avatar de {$user['username']}: HTTP {$response->status()}");
-            }
-
             // Verificar si ya existe un perfil social para este influencer y esta plataforma
             $socialProfile = SocialProfile::where('influencer_id', $influencer->id)
                                          ->where('platform_id', $platform->id)
@@ -155,7 +140,8 @@ class TwitchInfluencersSeeder extends Seeder
             *────────────────────────────────────────────────────────────────*/
             try {
                 app(\App\Http\Controllers\TwitchController::class)
-                    ->fetch($user['username']);    // ← esta es la línea nueva
+    ->syncProfile($user['username']);
+   // ← esta es la línea nueva
             } catch (\Throwable $e) {
                 $this->command->warn(
                     "No se pudo sincronizar {$user['username']}: {$e->getMessage()}"
@@ -175,8 +161,8 @@ class TwitchInfluencersSeeder extends Seeder
 
             foreach ($pendientes as $userName) {
                 try {
-                    app(\App\Http\Controllers\TwitchController::class)->fetch($userName);
-                    $this->command->info("Reintento OK: {$userName}");
+                    app(\App\Http\Controllers\TwitchController::class)
+                    ->syncProfile($user['username']);                                    $this->command->info("Reintento OK: {$userName}");
                 } catch (\Throwable $e) {
                     $this->command->warn("Reintento fallido {$userName}: ".$e->getMessage());
                 }

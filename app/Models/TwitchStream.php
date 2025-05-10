@@ -14,6 +14,7 @@ class TwitchStream extends Model
         'social_profile_id',
         'stream_id',
         'title',
+        'game_id', 
         'game_name',
         'stream_url',
         'thumbnail_url',

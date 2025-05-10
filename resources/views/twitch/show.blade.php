@@ -1,3 +1,17 @@
+@php
+// Mapa idioma (ISO 639-1) → país (ISO 3166-1 alpha2)
+$flagMap = [
+'en' => 'gb', // inglés → Reino Unido (union jack)
+'es' => 'es', // español → España
+'pt' => 'pt', // portugués → Portugal
+'fr' => 'fr', // francés → Francia
+'de' => 'de', // alemán → Alemania
+'ja' => 'jp', // japonés → Japón
+'zh' => 'cn', // chino → China
+'ru' => 'ru', // ruso → Rusia
+// añade los que necesites…
+];
+@endphp
 <x-layouts.app :title="__('Perfil de Twitch: ' . $profile->username)">
     <div class="container mx-auto px-4 py-8">
         <!-- Alertas -->
@@ -245,16 +259,21 @@
                                     <th class="py-3 px-4 text-left dark:text-gray-300">Título</th>
                                     <th class="py-3 px-4 text-left dark:text-gray-300">Juego/Categoría</th>
                                     <th class="py-3 px-4 text-right dark:text-gray-300">Duración</th>
-                                    <th class="py-3 px-4 text-right dark:text-gray-300">Visualizaciones</th>
+                                    <th class="py-3 px-4 text-right dark:text-gray-300">Views</th>
+                                    <th class="py-3 px-4 text-center dark:text-gray-300">Lang</th>
                                 </tr>
                             </thead>
+
                             <tbody>
                                 @foreach($recentStreams as $stream)
                                 <tr
                                     class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-zinc-700 transition-colors">
+                                    {{-- Fecha --}}
                                     <td class="py-3 px-4 dark:text-gray-200">
                                         {{ $stream->started_at ? \Carbon\Carbon::parse($stream->started_at)->format('d/m/Y') : 'N/A' }}
                                     </td>
+
+                                    {{-- Título con enlace --}}
                                     <td class="py-3 px-4">
                                         @if($stream->stream_url)
                                         <a href="{{ $stream->stream_url }}" target="_blank"
@@ -262,25 +281,52 @@
                                             {{ \Illuminate\Support\Str::limit($stream->title, 40) }}
                                         </a>
                                         @else
-                                        <span
-                                            class="dark:text-gray-200">{{ \Illuminate\Support\Str::limit($stream->title, 40) }}</span>
+                                        <span class="dark:text-gray-200">
+                                            {{ \Illuminate\Support\Str::limit($stream->title, 40) }}
+                                        </span>
                                         @endif
                                     </td>
-                                    <td class="py-3 px-4 dark:text-gray-200">{{ $stream->game_name ?? 'Sin categoría' }}
+
+                                    {{-- Juego / categoría --}}
+                                    <td class="py-3 px-4 dark:text-gray-200">
+                                        {{ $stream->game_name ?? 'Sin categoría' }}
                                     </td>
+
+                                    {{-- Duración --}}
                                     <td class="py-3 px-4 text-right dark:text-gray-200">
                                         @if($stream->duration_minutes)
                                         {{ floor($stream->duration_minutes / 60) }}h
                                         {{ $stream->duration_minutes % 60 }}m
                                         @else
-                                        -
+                                        –
                                         @endif
                                     </td>
+
+                                    {{-- Visualizaciones totales del VOD --}}
                                     <td class="py-3 px-4 text-right dark:text-gray-200">
-                                        {{ number_format($stream->viewer_count ?? 0) }}</td>
+                                        {{ number_format($stream->viewer_count ?? 0) }}
+                                    </td>
+
+                                    {{-- Idioma --}}
+                                    <td class="py-3 px-4 flex items-center justify-center dark:text-gray-200">
+                                        @php
+                                        $lang = strtolower($stream->language ?? '');
+                                        $cc = $flagMap[$lang] ?? null;
+                                        @endphp
+
+                                        @if($cc)
+                                        <img src="https://flagcdn.com/24x18/{{ $cc }}.png" alt="{{ $lang }}"
+                                            class="w-6 h-4 mr-2 rounded-sm flex-shrink-0">
+                                        <span class="text-sm font-medium">{{ strtoupper($lang) }}</span>
+                                        @else
+                                        <span class="text-sm font-medium">{{ strtoupper($lang ?: '-') }}</span>
+                                        @endif
+                                    </td>
+
                                 </tr>
                                 @endforeach
                             </tbody>
+
                         </table>
                     </div>
                     @else
