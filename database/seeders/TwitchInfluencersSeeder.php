@@ -8,17 +8,17 @@ use App\Models\SocialProfile;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Client\RequestException; 
+use Illuminate\Http\Client\RequestException;
 
 class TwitchInfluencersSeeder extends Seeder
 {
-    
+
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        $pendientes = [];  
+        $pendientes = [];
 
         // 1. Recupera o crea la plataforma Twitch
         $platform = Platform::firstOrCreate(
@@ -40,7 +40,7 @@ class TwitchInfluencersSeeder extends Seeder
                 'username' => 'thegrefg',
                 'avatar'   => 'https://static-cdn.jtvnw.net/jtv_user_pictures/ae756e73-8f9f-4e1b-8d5c-f88462a97262-profile_image-300x300.png',
             ],
-        
+
             // 🇺🇸  Estados Unidos
             [
                 'username' => 'ninja',
@@ -66,7 +66,7 @@ class TwitchInfluencersSeeder extends Seeder
                 'username' => 'loltyler1',
                 'avatar'   => 'https://static-cdn.jtvnw.net/jtv_user_pictures/0501af24-e0a3-4b3e-b2be-f3923bc082c3-profile_image-300x300.png',
             ],
-        
+
             // 🇨🇦  Canadá / Marruecos
             [
                 'username' => 'xqc',
@@ -80,13 +80,13 @@ class TwitchInfluencersSeeder extends Seeder
                 'username' => 'shroud',
                 'avatar'   => 'https://static-cdn.jtvnw.net/jtv_user_pictures/f4d3d8e7-7b4d-45f5-a4da-87d65e1b85d1-profile_image-300x300.png',
             ],
-        
+
             // 🇧🇷  Brasil
             [
                 'username' => 'gaules',
                 'avatar'   => 'https://static-cdn.jtvnw.net/jtv_user_pictures/0defff17-8c73-4e1d-8c11-50637e2b2fc7-profile_image-300x300.png',
             ],
-        
+
             // 🇯🇵  Japón
             [
                 'username' => 'fps_shaka',
@@ -96,18 +96,25 @@ class TwitchInfluencersSeeder extends Seeder
                 'username' => 'stylishnoob4',
                 'avatar'   => 'https://static-cdn.jtvnw.net/jtv_user_pictures/63218b8f-ec56-477d-819a-3142ab24c535-profile_image-300x300.png',
             ],
-        
+
             // 🇦🇷  Argentina
             [
                 'username' => 'coscu',
                 'avatar'   => 'https://static-cdn.jtvnw.net/jtv_user_pictures/383cbf85-56a2-4bd2-9330-fa3ab4db4eb1-profile_image-300x300.png',
             ],
-        ];            
+            [
+        'username' => 'th3antonio',
+        'avatar'   => 'https://static-cdn.jtvnw.net/jtv_user_pictures/placeholder-profile_image-300x300.png',
+    ],  [
+        'username' => 'snoodyboo',
+        'avatar'   => 'https://static-cdn.jtvnw.net/jtv_user_pictures/snoodyboo-profile_image-300x300.png',
+    ],
+        ];
 
         foreach ($twitchUsers as $user) {
             // Verificar si el influencer ya existe por username
             $influencer = Influencer::where('username', $user['username'])->first();
-            
+
             // Si no existe, crearlo
             if (!$influencer) {
                 $influencer = Influencer::create([
@@ -122,7 +129,7 @@ class TwitchInfluencersSeeder extends Seeder
             $socialProfile = SocialProfile::where('influencer_id', $influencer->id)
                                          ->where('platform_id', $platform->id)
                                          ->first();
-            
+
             // Solo crear el perfil social si no existe
             if (!$socialProfile) {
                 SocialProfile::create([
