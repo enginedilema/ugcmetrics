@@ -58,6 +58,13 @@ class TwitchController extends Controller
             return redirect()->route('twitch.index')
                 ->with('error', 'Plataforma Twitch no encontrada');
         }
+
+        try {
+            $this->syncProfile($username);
+        } catch (\Exception $e) {
+            \Log::warning("Sync fallido para {$username}: ".$e->getMessage());
+            session()->flash('error','No se pudieron actualizar métricas');
+        }
         
         // Obtener el perfil con sus relaciones
         $profile = SocialProfile::where('platform_id', $platform->id)
@@ -245,6 +252,7 @@ class TwitchController extends Controller
         curl_close($ch);
         $data = json_decode($response, true);
         
+        
         // Añadir esta línea para registrar la respuesta completa durante la depuración
         \Log::debug('Respuesta de API Twitch getUserData:', ['username' => $username, 'data' => $data]);
         
@@ -401,54 +409,60 @@ class TwitchController extends Controller
     /**
      * Save user data to database.
      */
-    private function saveUserData($userData, $username, $followersData = null)
-    {
-        // Obtener la plataforma y el perfil
-        $platform = Platform::where('name', 'Twitch')->first();
-        $profile = SocialProfile::where('platform_id', $platform->id)
-            ->where('username', $username)
-            ->first();
-        
-        if (!$profile) {
-            throw new \Exception('Perfil no encontrado: ' . $username);
-        }
-        
-        // Actualizar el perfil con los datos nuevos
-        $profile->update([
-            'profile_url' => "https://twitch.tv/{$username}",
-            'followers_count' => $followersData['total'] ?? $userData['view_count'] ?? 0,
-            'profile_picture' => $userData['profile_image_url'] ?? null,
-            'extra_data' => [
-                'description' => $userData['description'] ?? '',
-                'view_count' => $userData['view_count'] ?? 0,
-                'display_name' => $userData['display_name'] ?? $username,
+
+private function saveUserData(array $userData, string $username, ?array $followersData = null): SocialProfile
+{
+    $platform = Platform::firstOrCreate(['name' => 'Twitch'], [
+        'icon'  => 'fab fa-twitch',
+        'color' => '#6441a5',
+    ]);
+
+    /** @var SocialProfile $profile */
+    $profile = SocialProfile::firstOrCreate(
+        ['platform_id' => $platform->id, 'username' => $username],
+        ['profile_url' => "https://twitch.tv/{$username}"]
+    );
+
+    // contador total de seguidores (viene en users/follows?to_id)
+    $totalFollowers = $followersData['total'] ?? 0;
+
+    $profile->update([
+        'followers_count' => $totalFollowers,
+        'profile_picture' => $userData['profile_image_url'] ?? null,
+        'extra_data'      => [
+            'display_name'      => $userData['display_name']      ?? $username,
+            'description'       => $userData['description']       ?? '',
+            'view_count'        => $userData['view_count']        ?? 0,
+            'broadcaster_type'  => $userData['broadcaster_type']  ?? '',
+            'profile_image_url' => $userData['profile_image_url'] ?? '',
+            'offline_image_url' => $userData['offline_image_url'] ?? '',
+            'created_at'        => $userData['created_at']        ?? '',
+            'followers_total'   => $totalFollowers,
+        ],
+    ]);
+
+    // métrica diaria (1 fila / día / perfil)
+    TwitchMetrics::updateOrCreate(
+        [
+            'social_profile_id' => $profile->id,
+            'date'              => now()->toDateString(),
+        ],
+        [
+            'followers'       => $totalFollowers,
+            'views'           => $userData['view_count'] ?? 0,
+            'average_viewers' => $userData['average_viewers'] ?? null,
+            'peak_viewers'    => $userData['peak_viewers']    ?? null,
+            'is_live'         => false,
+            'extra_data'      => [
+                'description'      => $userData['description']      ?? '',
                 'broadcaster_type' => $userData['broadcaster_type'] ?? '',
-                'profile_image_url' => $userData['profile_image_url'] ?? '',
-                'offline_image_url' => $userData['offline_image_url'] ?? '',
-                'created_at' => $userData['created_at'] ?? '',
-                'followers_total' => $followersData['total'] ?? 0,
-            ]
-        ]);
-        
-        // Guardar métricas diarias
-        TwitchMetrics::updateOrCreate(
-            [
-                'social_profile_id' => $profile->id,
-                'date' => now()->format('Y-m-d')
             ],
-            [
-                'followers' => $followersData['total'] ?? 0,
-                'views' => $userData['view_count'] ?? 0,
-                'is_live' => false, // Se actualizará después si está en vivo
-                'extra_data' => [
-                    'description' => $userData['description'] ?? '',
-                    'broadcaster_type' => $userData['broadcaster_type'] ?? '',
-                ]
-            ]
-        );
-        
-        return $profile;
-    }
+        ]
+    );
+
+    return $profile;
+}
+
 
     /**
      * Save streams data to database.
@@ -644,5 +658,41 @@ class TwitchController extends Controller
                 ]),
             ]);
         }
+
     }
+    
+     /**
+     * Sincroniza datos de Twitch (perfil, streams, métricas y reportes)
+     */
+     private function syncProfile(string $username): void
+    {
+        $accessToken = $this->getAccessToken();
+        $clientId    = env('TWITCH_CLIENT_ID');
+
+        if (! $accessToken || ! $clientId) {
+            throw new \Exception('Faltan configuraciones de API de Twitch');
+        }
+
+        // 1. Datos de usuario
+        $userData       = $this->getUserData($username, $accessToken, $clientId);
+        // 2. Stream en vivo
+        $liveData       = $this->getStreamData($username,   $accessToken, $clientId);
+        // 3. Últimos vídeos
+        $streamsData    = $this->getStreamsData($username,  $accessToken, $clientId);
+        // 4. Seguidores
+        $followersData  = $this->getFollowersData($userData['id'], $accessToken, $clientId);
+
+        // 5. Guardar todo en BD
+        $profile = $this->saveUserData($userData, $username, $followersData);
+        $this->saveStreamsData($streamsData, $profile->id);
+
+        // 6. Si está en vivo, actualiza métricas en tiempo real
+        if ($liveData) {
+            $this->updateLiveStreamMetrics($liveData, $profile->id);
+        }
+
+        // 7. Genera informes mensuales
+        $this->generateReports($username);
+    }
+
 }
