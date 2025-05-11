@@ -21,6 +21,10 @@ class YouTubeMetrics extends Model
         'channel_quality_score',
     ];
 
+    protected $casts = [
+        'date' => 'date',
+    ];
+
     public function socialProfile()
     {
         return $this->belongsTo(SocialProfile::class);

@@ -44,9 +44,28 @@ class YouTubeMetricsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(YouTubeMetrics $youTubeMetrics)
+    public function show($id)
     {
-        return response()->json($youTubeMetrics);
+        $influencer = Influencer::with(['socialProfiles' => function($query) {
+            $query->whereHas('platform', function($q) {
+                $q->where('name', 'YouTube');
+            });
+        }])->findOrFail($id);
+
+        $youtubeProfile = $influencer->socialProfiles->firstWhere('platform.name', 'YouTube');
+        
+        if (!$youtubeProfile) {
+            return redirect()->route('youtube.index')
+                ->with('error', 'No se encontró un perfil de YouTube para este influencer.');
+        }
+
+        $metrics = YouTubeMetrics::where('social_profile_id', $youtubeProfile->id)
+            ->orderBy('date', 'desc')
+            ->get();
+            
+        $latestMetrics = $metrics->first();
+
+        return view('youtube.show', compact('influencer', 'youtubeProfile', 'metrics', 'latestMetrics'));
     }
 
     /**

@@ -1,108 +1,64 @@
-<x-layouts.app :title="__('YouTube Metrics')">
+<x-layouts.app :title="__('YouTube Channel Details')">
     <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
-        <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-            <!-- Total de influencers con YouTube -->
-            <div
-                class="flex items-center justify-center aspect-video rounded-xl border border-red-300 bg-white shadow-lg dark:bg-neutral-900 dark:border-neutral-700 hover:shadow-xl transition-shadow duration-300">
-                <div class="text-center space-y-2">
-                    <p class="text-base font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wide">
-                        YouTube Influencers
-                    </p>
-                    <p class="text-5xl font-extrabold text-red-600 dark:text-red-400">
-                        {{ $influencers->filter(fn($i) => $i->socialProfiles->contains('platform.name', 'YouTube'))->count() }}
-                    </p>
-                    <div class="h-1 w-10 mx-auto bg-red-300 rounded-full"></div>
-                </div>
-            </div>
+        <!-- Button para volver a la lista de canales -->
+        <div class="flex items-center mb-4">
+            <a href="{{ route('youtube.index') }}" class="inline-flex items-center text-sm font-medium text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                Volver a la lista
+            </a>
+        </div>
 
-            <!-- Total de suscriptores en YouTube -->
-            <div
-                class="flex items-center justify-center aspect-video rounded-xl border border-red-300 bg-white shadow-lg dark:bg-neutral-900 dark:border-neutral-700 hover:shadow-xl transition-shadow duration-300">
-                <div class="text-center space-y-2">
-                    <p class="text-base font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wide">
-                        Suscriptores Totales
-                    </p>
-                    <p class="text-5xl font-extrabold text-red-600 dark:text-red-400">
-                        {{
-                            $influencers->flatMap->socialProfiles
-                                ->filter(fn($p) => $p->platform->name === 'YouTube')
-                                ->sum('followers_count')
-                        }}
-                    </p>
-                    <div class="h-1 w-10 mx-auto bg-red-300 rounded-full"></div>
-                </div>
+        <!-- Header -->
+        <div class="flex items-center gap-4 p-6 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-neutral-700">
+            <div class="w-24 h-24 rounded-full overflow-hidden">
+                <img src="{{ $youtubeProfile->profile_picture ?? asset('storage/images/placeholder-profile.png') }}"
+                    alt="Profile picture of {{ $influencer->name }}"
+                    class="w-full h-full object-cover">
             </div>
-
-            <!-- Total de visualizaciones -->
-            <div
-                class="flex items-center justify-center aspect-video rounded-xl border border-red-300 bg-white shadow-lg dark:bg-neutral-900 dark:border-neutral-700 hover:shadow-xl transition-shadow duration-300">
-                <div class="text-center space-y-2">
-                    <p class="text-base font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wide">
-                        Visualizaciones Totales
-                    </p>
-                    <p class="text-5xl font-extrabold text-red-600 dark:text-red-400">
-                        {{
-                            $influencers->flatMap->socialProfiles
-                                ->filter(fn($p) => $p->platform->name === 'YouTube')
-                                ->sum('views_count')
-                        }}
-                    </p>
-                    <div class="h-1 w-10 mx-auto bg-red-300 rounded-full"></div>
-                </div>
+            <div class="flex-1">
+                <h1 class="text-2xl font-bold text-neutral-800 dark:text-white">{{ $influencer->name }}</h1>
+                <a href="{{ $youtubeProfile->profile_url }}" target="_blank" 
+                    class="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
+                    {{ $youtubeProfile->username }}
+                </a>
             </div>
         </div>
 
-        <div
-            class="relative h-full flex-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
-            <h2 class="text-xl font-semibold text-neutral-800 dark:text-white mb-4">Listado de YouTubers</h2>
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left border-separate border-spacing-y-2">
-                    <thead>
-                        <tr class="text-neutral-600 dark:text-neutral-300">
-                            <th class="py-3 px-4">Foto</th>
-                            <th class="py-3 px-4">Nombre</th>
-                            <th class="py-3 px-4">Canal</th>
-                            <th class="py-3 px-4">Suscriptores</th>
-                            <th class="py-3 px-4">Visualizaciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($influencers as $influencer)
-                            @php
-                                $youtube = $influencer->socialProfiles->firstWhere('platform.name', 'YouTube');
-                            @endphp
-                            @if ($youtube)
-                                <tr class="bg-white dark:bg-neutral-800 shadow-sm rounded-md">
-                                    <td class="py-2 px-4">
-                                        <div class="w-[50px] h-[50px]">
-                                            <a href="{{route('youtube.show', $influencer->id)}}"
-                                                class="w-full h-full rounded-full overflow-hidden">
-                                                <img src="{{ $influencer->profile_picture_url !== '' ? asset('storage/' . $influencer->profile_picture_url) : asset('storage/images/placeholder-profile.png') }}"
-                                                    alt="Foto de {{ $influencer->name }}"
-                                                    class="w-full h-full rounded-full object-cover">
-                                            </a>
-                                        </div>
-                                    </td>
-                                    <td class="py-2 px-4 font-medium text-neutral-800 dark:text-white">
-                                        {{ $influencer->name }}
-                                    </td>
-                                    <td class="py-2 px-4">
-                                        <a href="{{ $youtube->profile_url }}" target="_blank"
-                                            class="text-indigo-600 hover:underline">
-                                            {{ $youtube->platform->name }}
-                                        </a>
-                                    </td>
-                                    <td class="py-2 px-4 text-neutral-700 dark:text-neutral-300">
-                                        {{ number_format($youtube->followers_count) }}
-                                    </td>
-                                    <td class="py-2 px-4 text-neutral-700 dark:text-neutral-300">
-                                        {{ number_format($youtube->views_count) }}
-                                    </td>
-                                </tr>
-                            @endif
-                        @endforeach
-                    </tbody>
-                </table>
+        <!-- Metricas -->
+        <div class="grid auto-rows-min gap-4 md:grid-cols-3">
+            <div class="flex items-center justify-center aspect-video rounded-xl border border-red-300 bg-white shadow-lg dark:bg-neutral-900 dark:border-neutral-700">
+                <div class="text-center space-y-2">
+                    <p class="text-base font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wide">
+                        Suscriptores
+                    </p>
+                    <p class="text-4xl font-extrabold text-red-600 dark:text-red-400">
+                        {{ number_format($youtubeProfile->followers_count) }}
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-center aspect-video rounded-xl border border-red-300 bg-white shadow-lg dark:bg-neutral-900 dark:border-neutral-700">
+                <div class="text-center space-y-2">
+                    <p class="text-base font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wide">
+                        Visualizaciones
+                    </p>
+                    <p class="text-4xl font-extrabold text-red-600 dark:text-red-400">
+                        {{ number_format($youtubeProfile->views_count) }}
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-center aspect-video rounded-xl border border-red-300 bg-white shadow-lg dark:bg-neutral-900 dark:border-neutral-700">
+                <div class="text-center space-y-2">
+                    <p class="text-base font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wide">
+                        Videos
+                    </p>
+                    <p class="text-4xl font-extrabold text-red-600 dark:text-red-400">
+                        {{ number_format($latestMetrics->video_count ?? 0) }}
+                    </p>
+                </div>
             </div>
         </div>
     </div>
