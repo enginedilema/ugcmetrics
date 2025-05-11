@@ -22,6 +22,7 @@ return new class extends Migration
             $table->float('engagement_rate')->nullable();
             $table->json('extra_data')->nullable(); // datos variables
             $table->date('last_updated')->nullable(); // fecha de la última actualización
+            $table->bigInteger('views_count')->nullable()->after('followers_count');
             $table->timestamps();
         });
     }
