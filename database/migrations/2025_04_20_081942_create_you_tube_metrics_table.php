@@ -22,6 +22,8 @@ return new class extends Migration
             $table->integer('video_count')->nullable();
             $table->float('average_watch_time')->nullable();
             $table->float('channel_quality_score')->nullable();
+            $table->string('profile_picture')->nullable()->change(); // ja existeix
+            $table->bigInteger('views_count')->nullable(); // AFEGIR        
             $table->timestamps();
         
             $table->unique(['social_profile_id', 'date']);

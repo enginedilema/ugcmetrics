@@ -77,7 +77,11 @@
                                         <div class="w-[50px] h-[50px]">
                                             <a href="{{route('youtube.show', $influencer->id)}}"
                                                 class="w-full h-full rounded-full overflow-hidden">
-                                                <img src="{{ $influencer->profile_picture_url !== '' ? asset('storage/' . $influencer->profile_picture_url) : asset('storage/images/placeholder-profile.png') }}"
+                                                <img src="{{ 
+                                                    !empty($influencer->profile_picture_url)
+                                                        ? asset('storage/' . $influencer->profile_picture_url)
+                                                        : ($youtube->profile_picture ?? asset('storage/images/placeholder-profile.png'))
+                                                }}"
                                                     alt="Foto de {{ $influencer->name }}"
                                                     class="w-full h-full rounded-full object-cover">
                                             </a>

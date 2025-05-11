@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         \App\Console\Commands\GenerateInstagramReports::class,
         \App\Console\Commands\GenerateTwitchReports::class,
+        \App\Console\Commands\GenerateYouTubeReports::class,
     ];
 
     /**
@@ -25,6 +26,7 @@ class Kernel extends ConsoleKernel
         // Programar comandos para ejecutar en horarios específicos
         $schedule->command('instagram:generate-reports')->monthlyOn(30, '23:50');
         $schedule->command('twitch:generate-reports')->monthlyOn(30, '23:55');
+        $schedule->command('youtube:generate-reports')->monthlyOn(30, '23:55');
     }
 
     /**
