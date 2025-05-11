@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('social_profile_id')->constrained()->onDelete('cascade');
             $table->string('stream_id')->unique(); // ID externo del stream (API de Twitch)
             $table->string('title')->nullable();
+            $table->string('game_id')->nullable();
             $table->string('game_name')->nullable();
             $table->string('stream_url')->nullable();
             $table->string('thumbnail_url')->nullable();

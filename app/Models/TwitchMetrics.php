@@ -31,6 +31,12 @@ class TwitchMetrics extends Model
 
     protected $dates = ['date'];
 
+    protected $casts = [
+        'date' => 'date',
+        'is_live' => 'boolean',
+        'extra_data' => 'array',
+    ];
+
     public function socialProfile()
     {
         return $this->belongsTo(SocialProfile::class);

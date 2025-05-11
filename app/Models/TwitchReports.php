@@ -23,6 +23,8 @@ class TwitchReports extends Model
         'hours_streamed',
         'streams_per_week',
         'chat_engagement', // mensajes por minuto promedio
+        'streams_count',
+        'game_distribution', 
         'estimated_monthly_revenue_min',
         'estimated_monthly_revenue_max',
         'estimated_sponsor_value_min',
@@ -33,10 +35,16 @@ class TwitchReports extends Model
 
     protected $casts = [
         'top_categories' => 'array',
+        'game_distribution' => 'array',
     ];
 
     public function socialProfile()
     {
         return $this->belongsTo(SocialProfile::class);
+    }
+
+    public function getMonthNameAttribute()
+    {
+        return \Carbon\Carbon::create()->month($this->month)->locale('es_ES')->monthName;
     }
 }

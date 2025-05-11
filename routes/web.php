@@ -49,6 +49,6 @@ Route::get('instagram/get-data', InstagramGetInstagramData::class)->name('instag
 // Rutas para Twitch
 Route::get('twitch', [App\Http\Controllers\TwitchController::class, 'index'])->name('twitch.index');
 Route::get('twitch/{username}', [App\Http\Controllers\TwitchController::class, 'show'])->name('twitch.show');
-Route::get('twitch/{username}/fetch', [App\Http\Controllers\TwitchController::class, 'fetchData'])->name('twitch.fetch');
+Route::get('twitch/{username}/fetch', [App\Http\Controllers\TwitchController::class, 'fetch'])->name('twitch.fetch');
 
 require __DIR__ . '/auth.php';
