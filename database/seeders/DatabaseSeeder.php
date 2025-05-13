@@ -26,7 +26,6 @@ class DatabaseSeeder extends Seeder
             InfluencerSeeder::class,
             MetricSeeder::class,
             InstagramInfluencersSeeder::class,
-            TwitchInfluencersSeeder::class,
         ]);
     }
 }

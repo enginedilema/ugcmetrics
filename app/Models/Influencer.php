@@ -9,7 +9,7 @@ class Influencer extends Model
 {
     /** @use HasFactory<\Database\Factories\InfluencerFactory> */
     use HasFactory;
-    protected $fillable = ['name', 'bio', 'location', 'profile_picture_url', 'username'];
+    protected $fillable = ['name', 'bio', 'location', 'profile_picture_url'];
 
     public function socialProfiles()
     {

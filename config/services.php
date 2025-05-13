@@ -34,12 +34,9 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
-
     'twitch' => [
-        'client_id' => env('TWITCH_CLIENT_ID'),
-        'client_secret' => env('TWITCH_CLIENT_SECRET'),
-        'access_token' => env('TWITCH_ACCESS_TOKEN'),
-        'token_type' => env('TWITCH_TOKEN_TYPE', 'bearer'),
-    ],
+        'client_id' => env('5nu7guqjmn8dt9dkrsqr1vtbfhug7o'),
+        'access_token' => env('nnp1e6f7iqw8uph8k5arc2w9v3yl1h'),
+    ]
 
 ];

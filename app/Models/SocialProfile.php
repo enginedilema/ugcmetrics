@@ -58,7 +58,6 @@ class SocialProfile extends Model
     {
         return $this->hasMany(TiktokMetrics::class);
     }
-
     /**
      * Get the Instagram posts associated with the social profile.
      * 
@@ -67,64 +66,6 @@ class SocialProfile extends Model
     public function instagramPosts(): HasMany
     {
         return $this->hasMany(InstagramPost::class)
-            ->whereHas('platform', fn($q) => $q->where('name', 'Instagram'));
+                    ->whereHas('platform', fn ($q) => $q->where('name', 'Instagram'));
     }
-
-    /**
-     * Get the Twitter metrics associated with the social profile.
-     * 
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function twitterMetrics(): HasMany
-    {
-        return $this->hasMany(TwitterMetrics::class)
-                    ->whereHas('platform', fn ($q) => $q->where('name', 'Twitter'));
-    }
-
-    /**
-     * Get the Twitter posts associated with the social profile.
-     * 
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function twitterPosts(): HasMany
-    {
-        return $this->hasMany(TwitterPost::class);
-    }
-
-    /**
-     * Get the Twitter reports associated with the social profile.
-     * 
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function twitterReports(): HasMany
-    {
-        return $this->hasMany(TwitterReports::class);
-    }
-
-    /**
-     * Get the Twitch metrics associated with the social profile.
-     * 
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function twitchMetrics(): HasMany
-    {
-        return $this->hasMany(TwitchMetrics::class, 'social_profile_id');
-    }
-
-    /**
-     * Get the Twitch streams associated with the social profile.
-     * 
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function twitchStreams(): HasMany
-    {
-        return $this->hasMany(TwitchStream::class, 'social_profile_id');
-    }
-
-
-    public function twitchReports()
-    {
-        return $this->hasMany(TwitchReports::class, 'social_profile_id');
-    }
-
 }

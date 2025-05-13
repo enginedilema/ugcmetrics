@@ -43,9 +43,10 @@ class InfluencerPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Influencer $influencer): bool
+    public function delete(User $user, Influencer $influencer)
     {
-        return false;
+        // Define tu lógica de autorización, por ejemplo:
+        return $user->isAdmin(); // Si el usuario es administrador
     }
 
     /**
