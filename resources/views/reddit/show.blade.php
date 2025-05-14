@@ -28,7 +28,6 @@
             class="bg-white dark:bg-gray-800 p-8 sm:p-10 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
             <div class="flex items-center space-x-6 mb-4">
                 @php
-                    // Default avatar URL if none provided
                     $avatarUrl = $user['avatar'] ?? 'https://via.placeholder.com/128'; // Placeholder image
                 @endphp
                 <img src="{{ $avatarUrl }}" alt="Avatar"
