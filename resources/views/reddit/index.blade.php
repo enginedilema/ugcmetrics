@@ -2,6 +2,7 @@
     <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
         <div class="grid auto-rows-min gap-4 md:grid-cols-3">
             <div
+            <!-- This div is for the total influencers card -->
                 class="flex items-center justify-center aspect-video rounded-xl border border-orange-300 bg-white shadow-lg dark:bg-neutral-900 dark:border-neutral-700 hover:shadow-xl transition-shadow duration-300">
                 <div class="text-center space-y-2">
                     <p class="text-base font-semibold text-gray-500 dark:text-gray-300 uppercase tracking-wide">
