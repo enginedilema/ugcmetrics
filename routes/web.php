@@ -14,10 +14,6 @@ use App\Http\Controllers\{
     TwitterMetricsController
 };
 
-<<<<<<< HEAD
-
-=======
->>>>>>> reddit
 Route::get('/', [InfluencerController::class, 'index'])->name('home');
 
 Route::view('dashboard', 'dashboard')
@@ -39,6 +35,7 @@ Route::get('instagram/{id}', [InstagramMetricsController::class, 'show'])->name(
 Route::get('twitter', [TwitterMetricsController::class, 'index'])->name('twitter.index');
 Route::get('twitter/{id}', [TwitterMetricsController::class, 'show'])->name('twitter.show');
 Route::get('twitter/fetch-data', TwitterGetTwitterData::class)->name('twitter.fetch-data');
+Route::get('/twitter-stats/{username}', [TwitterStatsController::class, 'show']);
 
 // Rutas para Influencers
 Route::get('influencer', [InfluencerController::class, 'index'])->name('influencer.index');
@@ -59,5 +56,7 @@ Route::get('twitch/{username}/fetch', [App\Http\Controllers\TwitchController::cl
 //Rutas de reddit
 Route::get('/reddit', [RedditController::class, 'index'])->name('reddit.index');
 Route::get('/reddit/{username}', [RedditController::class, 'show'])->name('reddit.show');
+
+
 
 require __DIR__ . '/auth.php';
