@@ -13,7 +13,9 @@
         }
     </style>
 </head>
-
+        <div class="bg-white p-6 rounded-xl shadow-md"> 
+<body class="bg-gray-100 text-gray-900">
+    <div class="container mx-auto p-4 sm:p-6 max-w-2xl">
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen">
     <div class="container mx-auto p-4 sm:p-6 max-w-3xl pt-4">
         <a href="{{ route('reddit.index') }}"
@@ -24,6 +26,25 @@
             Volver al listado
         </a>
 
+        <div class="bg-white p-5 sm:p-6 rounded-lg shadow-sm">
+            <div class="flex items-center space-x-4 mb-6">
+                @if($user['avatar'])
+                <img src="{{ $user['avatar'] }}" alt="Avatar" class="w-12 h-12 sm:w-16 sm:h-16 rounded-full border border-gray-200">
+                @endif
+                <h1 class="text-2xl sm:text-3xl font-semibold text-[#FF4500]">u/{{ $user['username'] }}</h1>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 text-lg">
+                <div><strong>Links:</strong> {{ $user['link_karma'] }}</div>
+                <div><strong>Comentarios:</strong> {{ $user['comment_karma'] }}</div>
+                <div><strong>Total:</strong> {{ $user['total_karma'] }}</div>
+                <div><strong>Creado el:</strong> {{ $user['created_utc'] }}</div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-base sm:text-lg">
+                <div><strong class="text-gray-700">Karma (Links):</strong> {{ $user['link_karma'] }}</div>
+                <div><strong class="text-gray-700">Karma (Comentarios):</strong> {{ $user['comment_karma'] }}</div>
+                <div><strong class="text-gray-700">Karma Total:</strong> {{ $user['total_karma'] }}</div>
+                <div><strong class="text-gray-700">Creado el:</strong> {{ $user['created_utc'] }}</div>
         <div
             class="bg-white dark:bg-gray-800 p-8 sm:p-10 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
             <div class="flex items-center space-x-6 mb-4">
@@ -87,6 +108,7 @@
                     <h3 class="text-lg font-semibold dark:text-white mb-2">Creado el</h3>
                     <p class="text-2xl font-bold text-orange-600 dark:text-orange-400">{{ $user['created_utc'] }}</p>
                 </div>
+>>>>>>> 544da27aa5a77a4d979a4264a1e9bb4b0057a5ae
             </div>
         </div>
     </div>
