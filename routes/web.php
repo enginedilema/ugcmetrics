@@ -5,6 +5,7 @@ use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RedditController;
 use App\Http\Controllers\{
     InstagramGetInstagramData,
     InstagramMetricsController,
@@ -51,4 +52,8 @@ Route::get('twitch', [App\Http\Controllers\TwitchController::class, 'index'])->n
 Route::get('twitch/{username}', [App\Http\Controllers\TwitchController::class, 'show'])->name('twitch.show');
 Route::get('twitch/{username}/fetch', [App\Http\Controllers\TwitchController::class, 'fetch'])->name('twitch.fetch');
 
+
+
+Route::get('/reddit', [RedditController::class, 'index'])->name('reddit.index');
+Route::get('/reddit/{username}', [RedditController::class, 'show'])->name('reddit.show');
 require __DIR__ . '/auth.php';
