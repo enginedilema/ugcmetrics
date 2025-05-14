@@ -14,7 +14,10 @@ use App\Http\Controllers\{
     TwitterMetricsController
 };
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> reddit
 Route::get('/', [InfluencerController::class, 'index'])->name('home');
 
 Route::view('dashboard', 'dashboard')
