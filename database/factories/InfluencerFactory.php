@@ -17,7 +17,11 @@ class InfluencerFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => $this->faker->name,
+            'bio' => $this->faker->sentence,
+            'location' => $this->faker->city,
+            'profile_picture_url' => $this->faker->imageUrl(),
+            'username' => $this->faker->userName,
         ];
     }
 }
