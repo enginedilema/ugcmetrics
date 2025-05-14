@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 class SyncRedditInfluencers extends Command
 {
     protected $signature = 'reddit:sync-influencers';
-    protected $description = 'Sincroniza influencers de Reddit en la base de datos';
+    protected $description = 'Sincroniza influences de Reddit en la base de datos';
 
     public function handle()
     {

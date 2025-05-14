@@ -96,7 +96,7 @@ class RedditController extends Controller
             Log::error("Failed to fetch Reddit user: {$username}, Response: " . $response->body());
             return redirect()->route('reddit.index')->with('error', 'No se pudo obtener la información del usuario.');
         } catch (\Exception $e) {
-            Log::error("Error in RedditController::show for user {$username}: " . $e->getMessage());
+            Log::error("Error en el RedditController::show for user {$username}: " . $e->getMessage());
             return redirect()->route('reddit.index')->with('error', 'Error al procesar la solicitud: ' . $e->getMessage());
         }
     }

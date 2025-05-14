@@ -53,8 +53,7 @@ Route::get('twitch', [App\Http\Controllers\TwitchController::class, 'index'])->n
 Route::get('twitch/{username}', [App\Http\Controllers\TwitchController::class, 'show'])->name('twitch.show');
 Route::get('twitch/{username}/fetch', [App\Http\Controllers\TwitchController::class, 'fetch'])->name('twitch.fetch');
 
-//Rutas reddit
-
+//Rutas de reddit
 Route::get('/reddit', [RedditController::class, 'index'])->name('reddit.index');
 Route::get('/reddit/{username}', [RedditController::class, 'show'])->name('reddit.show');
 

@@ -42,7 +42,7 @@
                             <th class="py-3 px-4">Nombre</th>
                             <th class="py-3 px-4">Plataformas</th>
                             <th class="py-3 px-4">Seguidores Totales</th>
-                            <th class="py-3 px-4">Karma Total (Reddit)</th>
+                            <th class="py-3 px-4">Total (Reddit)</th>
                         </tr>
                     </thead>
                     <tbody>
