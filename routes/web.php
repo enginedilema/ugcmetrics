@@ -13,6 +13,8 @@ use App\Http\Controllers\{
     TwitterMetricsController
 };
 
+use App\Http\Controllers\RedditController;
+
 Route::get('/', [InfluencerController::class, 'index'])->name('home');
 
 Route::view('dashboard', 'dashboard')
@@ -50,5 +52,10 @@ Route::get('instagram/get-data', InstagramGetInstagramData::class)->name('instag
 Route::get('twitch', [App\Http\Controllers\TwitchController::class, 'index'])->name('twitch.index');
 Route::get('twitch/{username}', [App\Http\Controllers\TwitchController::class, 'show'])->name('twitch.show');
 Route::get('twitch/{username}/fetch', [App\Http\Controllers\TwitchController::class, 'fetch'])->name('twitch.fetch');
+
+//Rutas reddit
+
+Route::get('/reddit', [RedditController::class, 'index'])->name('reddit.index');
+Route::get('/reddit/{username}', [RedditController::class, 'show'])->name('reddit.show');
 
 require __DIR__ . '/auth.php';

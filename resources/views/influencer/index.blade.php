@@ -42,6 +42,7 @@
                             <th class="py-3 px-4">Nombre</th>
                             <th class="py-3 px-4">Plataformas</th>
                             <th class="py-3 px-4">Seguidores Totales</th>
+                            <th class="py-3 px-4">Karma Total (Reddit)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -49,7 +50,7 @@
                             <tr class="bg-white dark:bg-neutral-800 shadow-sm rounded-md">
                                 <td class="py-2 px-4">
                                     <div class="w-[50px] h-[50px]">
-                                        <img src="{{ $influencer->profile_picture_url !== '' ? asset('storage/' . $influencer->profile_picture_url) : asset('storage/img/influencer/placeholder-profile.png') }}"
+                                        <img src="{{ $influencer->profile_picture_url ? asset('storage/' . $influencer->profile_picture_url) : asset('storage/img/influencer/placeholder-profile.png') }}"
                                             alt="Foto de {{ $influencer->name }}"
                                             class="w-full h-full rounded-full object-cover"
                                             style="width: 50px; height: 50px;">
@@ -63,13 +64,16 @@
                                     @foreach ($influencer->socialProfiles as $profile)
                                         <a href="{{ $profile->profile_url ?? '#' }}" target="_blank"
                                             class="text-indigo-600 hover:underline">
-                                            <flux:avatar circle src="{{asset('storage/img/platform/'. Str::lower($profile->platform->name).'.png')}}" />
+                                            <flux:avatar circle src="{{ asset('storage/img/platform/' . Str::lower($profile->platform->name) . '.png') }}" />
                                         </a>
                                     @endforeach
-                                </flux:avatar.group>
+                                    </flux:avatar.group>
                                 </td>
                                 <td class="py-2 px-4 text-neutral-700 dark:text-neutral-300">
                                     {{ $influencer->socialProfiles->sum('followers_count') }}
+                                </td>
+                                <td class="py-2 px-4 text-neutral-700 dark:text-neutral-300">
+                                    {{ $influencer->socialProfiles->where('platform.name', 'Reddit')->sum('total_karma') }}
                                 </td>
                             </tr>
                         @endforeach
