@@ -9,8 +9,10 @@ use Illuminate\Support\Facades\Log;
 
 class TwitterStatsService
 {
-    protected $client;
+    protected Client $client;
     protected $headers;
+
+    protected Client $apiClient;
 
     public function __construct()
     {
@@ -23,6 +25,43 @@ class TwitterStatsService
                 'Accept-Language' => 'en-US,en;q=0.5',
             ]
         ]);
+
+        $this->apiClient = new Client([
+            'base_uri' => 'https://api.twitter.com/2/',
+            'timeout' => 15.0,
+            'headers' => [
+                'Authorization' => 'Bearer AAAAAAAAAAAAAAAAAAAAAJKI1wEAAAAAMSBql%2BQXAj6951TsOlUZlhgdGKA%3DtZLvTF5xCaf4P1hfOs5t9lPrleJJPTF2An0iHnQaQ7SdZJChd0',
+                'User-Agent' => 'YourApp/1.0'
+            ]
+        ]);
+    }
+
+    public function getInfluencerStatsFromAPI(string $username): ?array
+    {
+        try {
+            $response = $this->apiClient->get("users/by/username/{$username}", [
+                'query' => [
+                    'user.fields' => 'name,profile_image_url,public_metrics'
+                ]
+            ]);
+
+            $data = json_decode($response->getBody(), true);
+
+            return [
+                'name' => $data['data']['name'],
+                'handle' => $username,
+                'followers' => $data['data']['public_metrics']['followers_count'],
+                'following' => $data['data']['public_metrics']['following_count'],
+                'tweets' => $data['data']['public_metrics']['tweet_count'],
+                'profile_image' => $data['data']['profile_image_url'],
+                // last_tweets
+                'retrieved_at' => now()->toDateTimeString()
+            ];
+
+        } catch (RequestException $e) {
+            Log::error("Error fetching Twitter stats from API: " . $e->getMessage());
+            return null;
+        }
     }
 
     public function getInfluencerStats($username)
